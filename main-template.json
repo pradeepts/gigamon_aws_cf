@@ -213,7 +213,7 @@
                 }
             }
         },
-        "GigaVUE-FM": {
+        "GigaVUEFM": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
                 "Parameters": {
@@ -233,7 +233,7 @@
                         "Ref": "MgmtSubnet"
                     }
                 },
-                "TemplateURL": "https://raw.githubusercontent.com/sysgain/gigamon_aws_cf/master/nested/gigavue_fm.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/nested/gigavue_fm.json",
                 "TimeoutInMinutes": "5"
             }
         }
