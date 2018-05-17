@@ -233,7 +233,7 @@
                         "Ref": "MgmtSubnet"
                     }
                 },
-                "TemplateURL": "https://s3-eu-west-1.amazonaws.com/learn-cloudformation/lab7-nested-stacks/ec2-stack.json",
+                "TemplateURL": "https://raw.githubusercontent.com/sysgain/gigamon_aws_cf/master/nested/gigavue_fm.json",
                 "TimeoutInMinutes": "5"
             }
         }
