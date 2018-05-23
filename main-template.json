@@ -13,6 +13,22 @@
                         "GigaVUEFMInstanceType",
                         "GigaVUEFMVolumeSize"
                     ]
+                },
+                {
+                    "Label": {
+                        "default": "NtopNG Instance Configuration"
+                    },
+                    "Parameters": [
+                        "NtopNGInstanceType"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "GvTapAgent Instance Configuration"
+                    },
+                    "Parameters": [
+                        "GvTapAgentInstanceType"
+                    ]
                 }
             ],
             "ParameterLabels": {
@@ -24,6 +40,12 @@
                 },
                 "GigaVUEFMVolumeSize": {
                     "default": "Volume Size"
+                },
+                "NtopNGInstanceType": {
+                    "default": "Instance Type"
+                },
+                "GvTapAgentInstanceType": {
+                    "default": "Instance Type"
                 }
             }
         }
@@ -79,10 +101,29 @@
                 "x1.32xlarge"
             ],
             "ConstraintDescription": "must be a valid EC2 instance type."
+        },
+        "NtopNGInstanceType": {
+            "Description": "NtopNG EC2 instance type",
+            "Type": "String",
+            "Default": "t2.micro",
+            "AllowedValues": [
+                "t2.micro",
+                "t2.small",
+                "t2.medium"
+            ]
+        },
+        "GvTapAgentInstanceType": {
+            "Description": "GvTapAgent EC2 instance type",
+            "Type": "String",
+            "Default": "t2.micro",
+            "AllowedValues": [
+                "t2.micro",
+                "t2.small",
+                "t2.medium"
+            ]
         }
     },
-    "Mappings": {
-    },
+    "Mappings": {},
     "Resources": {
         "GigamonVPC": {
             "Type": "AWS::EC2::VPC",
@@ -236,6 +277,99 @@
                 "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/nested/gigavue_fm.json",
                 "TimeoutInMinutes": "5"
             }
+        },
+        "GvTapAgent": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "Parameters": {
+                    "KeyPair": {
+                        "Ref": "KeyPair"
+                    },
+                    "InstanceType": {
+                        "Ref": "NtopNGInstanceType"
+                    },
+                    "VPC": {
+                        "Ref": "GigamonVPC"
+                    },
+                    "Subnet1": {
+                        "Ref": "MgmtSubnet"
+                    },
+                    "Subnet2": {
+                        "Ref": "MirrorSubnet"
+                    }
+                },
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/nested/gvtap_agent.json",
+                "TimeoutInMinutes": "5"
+            }
+        },
+        "TrafficGenerator": {
+            "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": "GvTapAgent",
+            "Properties": {
+                "Parameters": {
+                    "KeyPair": {
+                        "Ref": "KeyPair"
+                    },
+                    "InstanceType": {
+                        "Ref": "NtopNGInstanceType"
+                    },
+                    "VPC": {
+                        "Ref": "GigamonVPC"
+                    },
+                    "Subnet": {
+                        "Ref": "MgmtSubnet"
+                    },
+                    "PrivateIp": {
+                        "Fn::GetAtt": [
+                            "GvTapAgent",
+                            "Outputs.PrivateIp"
+                        ]
+                    }
+                },
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/nested/traffic_generator.json",
+                "TimeoutInMinutes": "5"
+            }
+        },
+        "NtopNG": {
+            "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": "GigaVUEFM",
+            "Properties": {
+                "Parameters": {
+                    "KeyPair": {
+                        "Ref": "KeyPair"
+                    },
+                    "InstanceType": {
+                        "Ref": "NtopNGInstanceType"
+                    },
+                    "VPC": {
+                        "Ref": "GigamonVPC"
+                    },
+                    "Subnet": {
+                        "Ref": "MgmtSubnet"
+                    },
+                    "AvailabilityZone": {
+                        "Fn::GetAtt": [
+                            "MgmtSubnet",
+                            "AvailabilityZone"
+                        ]
+                    },
+                    "GigaVUEPublicIp": {
+                        "Fn::GetAtt": [
+                            "GigaVUEFM",
+                            "Outputs.PublicIp"
+                        ]
+                    },
+                    "GigaVUEInstanceId": {
+                        "Fn::GetAtt": [
+                            "GigaVUEFM",
+                            "Outputs.InstanceId"
+                        ]
+                    }
+                },
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/nested/ntopng.json",
+                "TimeoutInMinutes": "5"
+            }
         }
-    }
+    },
+    "Outputs": {}
 }
