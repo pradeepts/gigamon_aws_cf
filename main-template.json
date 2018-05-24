@@ -430,5 +430,21 @@
             }
         }
     },
-    "Outputs": {}
+    "Outputs": {
+        "GigaVUE-FM_URL": {
+            "Description": "URL for GigaVUE-FM",
+            "Value": {
+                "Fn::GetAtt": [
+                    "GigaVUEFM",
+                    "Outputs.PublicIp"
+                ]
+            }
+        },
+        "InstanceId": {
+            "Description": "The Instance ID",
+            "Value": {
+                "Ref": "GigaVUEFMInstance"
+            }
+        }
+    }
 }
