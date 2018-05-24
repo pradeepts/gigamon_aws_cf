@@ -15,21 +15,9 @@
             "Description": "VPC to launch virtual server in",
             "Type": "AWS::EC2::VPC::Id"
         },
-        "Subnet": {
+        "Subnet1": {
             "Description": "subnet to launch virtual server in",
             "Type": "AWS::EC2::Subnet::Id"
-        },
-        "AvailabilityZone": {
-            "Description": "Availability Zone Name",
-            "Type": "String"
-        },
-        "GigaVUEPublicIp": {
-            "Description": "GigaVUE-FM Instance Public IP",
-            "Type": "String"
-        },
-        "GigaVUEInstanceId": {
-            "Description": "GigaVUE-FM Instance ID",
-            "Type": "String"
         }
     },
     "Mappings": {
@@ -152,7 +140,7 @@
                         "AssociatePublicIpAddress": "True",
                         "DeleteOnTermination": "True",
                         "SubnetId": {
-                            "Ref": "Subnet"
+                            "Ref": "Subnet1"
                         },
                         "DeviceIndex": "0",
                         "GroupSet": [
@@ -183,6 +171,26 @@
                         "Key": "name",
                         "Value": "NtopNG"
                     }
+                ]
+            }
+        }
+    },
+    "Outputs": {
+        "PublicIp": {
+            "Description": "Server's PublicIp Address",
+            "Value": {
+                "Fn::GetAtt": [
+                    "NtopNGInstance",
+                    "PublicIp"
+                ]
+            }
+        },
+        "PrivateIp": {
+            "Description": "The Private IP",
+            "Value": {
+                "Fn::GetAtt": [
+                    "NtopNGInstance",
+                    "PrivateIp"
                 ]
             }
         }

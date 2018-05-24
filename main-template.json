@@ -16,6 +16,16 @@
                 },
                 {
                     "Label": {
+                        "default": "Gigamon node's Configuration"
+                    },
+                    "Parameters": [
+                        "GvTapControllersAMIId",
+                        "VseriesControllersAMIId",
+                        "VseriesNodesAMIId"
+                    ]
+                },
+                {
+                    "Label": {
                         "default": "NtopNG Instance Configuration"
                     },
                     "Parameters": [
@@ -46,6 +56,15 @@
                 },
                 "GvTapAgentInstanceType": {
                     "default": "Instance Type"
+                },
+                "GvTapControllersAMIId": {
+                    "default": "GvTapControllers AMI ID"
+                },
+                "VseriesControllersAMIId": {
+                    "default": "VseriesControllers AMI ID"
+                },
+                "VseriesNodesAMIId": {
+                    "default": "VseriesNodes AMI ID"
                 }
             }
         }
@@ -121,6 +140,21 @@
                 "t2.small",
                 "t2.medium"
             ]
+        },
+        "GvTapControllersAMIId": {
+            "Description": "GvTapControllers AMI ID",
+            "Type": "String",
+            "default": "ami-89681df1"
+        },
+        "VseriesControllersAMIId": {
+            "Description": "VseriesControllers AMI ID",
+            "Type": "String",
+            "default": "ami-936e1beb"
+        },
+        "VseriesNodesAMIId": {
+            "Description": "VseriesNodes AMI ID",
+            "Type": "String",
+            "default": "ami-556e1b2d"
         }
     },
     "Mappings": {},
@@ -280,6 +314,7 @@
         },
         "GvTapAgent": {
             "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": "GigaVUEFM",
             "Properties": {
                 "Parameters": {
                     "KeyPair": {
@@ -302,7 +337,7 @@
                 "TimeoutInMinutes": "5"
             }
         },
-        "TrafficGenerator": {
+        "NtopNG": {
             "Type": "AWS::CloudFormation::Stack",
             "DependsOn": "GvTapAgent",
             "Properties": {
@@ -316,23 +351,17 @@
                     "VPC": {
                         "Ref": "GigamonVPC"
                     },
-                    "Subnet": {
+                    "Subnet1": {
                         "Ref": "MgmtSubnet"
-                    },
-                    "PrivateIp": {
-                        "Fn::GetAtt": [
-                            "GvTapAgent",
-                            "Outputs.PrivateIp"
-                        ]
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/nested/traffic_generator.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/nested/ntopng.json",
                 "TimeoutInMinutes": "5"
             }
         },
-        "NtopNG": {
+        "TrafficGenerator": {
             "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": "GigaVUEFM",
+            "DependsOn": "NtopNG",
             "Properties": {
                 "Parameters": {
                     "KeyPair": {
@@ -344,8 +373,11 @@
                     "VPC": {
                         "Ref": "GigamonVPC"
                     },
-                    "Subnet": {
+                    "Subnet1": {
                         "Ref": "MgmtSubnet"
+                    },
+                    "Subnet2": {
+                        "Ref": "MirrorSubnet"
                     },
                     "AvailabilityZone": {
                         "Fn::GetAtt": [
@@ -364,9 +396,36 @@
                             "GigaVUEFM",
                             "Outputs.InstanceId"
                         ]
+                    },
+                    "GigaVUESGId": {
+                        "Fn::GetAtt": [
+                            "GigaVUEFM",
+                            "Outputs.SGId"
+                        ]
+                    },
+                    "GvTapPrivateIp": {
+                        "Fn::GetAtt": [
+                            "GvTapAgent",
+                            "Outputs.PrivateIp"
+                        ]
+                    },
+                    "GvTapControllersAMIId": {
+                        "Ref": "GvTapControllersAMIId"
+                    },
+                    "VseriesControllersAMIId": {
+                        "Ref": "VseriesControllersAMIId"
+                    },
+                    "VseriesNodesAMIId": {
+                        "Ref": "VseriesNodesAMIId"
+                    },
+                    "NtopNGPrivateIp": {
+                            "Fn::GetAtt": [
+                                "NtopNGInstance",
+                                "PrivateIp"
+                            ]
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/nested/ntopng.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/nested/traffic_generator.json",
                 "TimeoutInMinutes": "5"
             }
         }

@@ -15,12 +15,48 @@
             "Description": "VPC to launch virtual server in",
             "Type": "AWS::EC2::VPC::Id"
         },
-        "Subnet": {
+        "GvTapPrivateIp": {
+            "Description": "GvTapAgent PrivateIp",
+            "Type": "String"
+        },
+        "Subnet1": {
             "Description": "subnet to launch virtual server in",
             "Type": "AWS::EC2::Subnet::Id"
         },
-        "PrivateIp": {
-            "Description": "GvTapAgent PrivateIp",
+        "Subnet2": {
+            "Description": "subnet to launch virtual server in",
+            "Type": "AWS::EC2::Subnet::Id"
+        },
+        "AvailabilityZone": {
+            "Description": "Availability Zone Name",
+            "Type": "String"
+        },
+        "GigaVUEPublicIp": {
+            "Description": "GigaVUE-FM Instance Public IP",
+            "Type": "String"
+        },
+        "GigaVUEInstanceId": {
+            "Description": "GigaVUE-FM Instance ID",
+            "Type": "String"
+        },
+        "GigaVUESGId": {
+            "Description": "GigaVUE-FM SG ID",
+            "Type": "String"
+        },
+        "GvTapControllersAMIId": {
+            "Description": "GvTapControllers AMI ID",
+            "Type": "String"
+        },
+        "VseriesControllersAMIId": {
+            "Description": "VseriesControllers AMI ID",
+            "Type": "String"
+        },
+        "VseriesNodesAMIId": {
+            "Description": "VseriesNodes AMI ID",
+            "Type": "String"
+        },
+        "NtopNGPrivateIp": {
+            "Description": "NtopNG PrivateIp",
             "Type": "String"
         }
     },
@@ -144,7 +180,7 @@
                         "AssociatePublicIpAddress": "True",
                         "DeleteOnTermination": "True",
                         "SubnetId": {
-                            "Ref": "Subnet"
+                            "Ref": "Subnet1"
                         },
                         "DeviceIndex": "0",
                         "GroupSet": [
@@ -159,17 +195,81 @@
                         "Fn::Join": [
                             "",
                             [
-
                                 "#!/bin/bash -ex\n",
                                 "agent1_ip=",
                                 {
                                     "Ref": "PrivateIp"
                                 },
                                 "\n",
+                                "FM_ID=",
+                                {
+                                    "Ref": "GigaVUEInstanceId"
+                                },
+                                "\n",
+                                "VPC_ID=",
+                                {
+                                    "Ref": "VPC"
+                                },
+                                "\n",
+                                "KEY_PAIR=",
+                                {
+                                    "Ref": "KeyPair"
+                                },
+                                "\n",
+                                "MGMT_SUBNET=",
+                                {
+                                    "Ref": "Subnet1"
+                                },
+                                "\n",
+                                "MIRROR_SUBNET=",
+                                {
+                                    "Ref": "Subnet2"
+                                },
+                                "\n",
+                                "GIGAMON_SG_ID=",
+                                {
+                                    "Ref": "GigaVUESGId"
+                                },
+                                "\n",
+                                "REGION=",
+                                {
+                                    "Ref": "AWS::Region"
+                                },
+                                "\n",
+                                "AZZONE=",
+                                {
+                                    "Ref": "AvailabilityZone"
+                                },
+                                "\n",
+                                "NTOPNG_IP=",
+                                {
+                                    "Ref":"NtopNGPrivateIp"
+                                },
+                                "\n",
+                                "FM_IP=",
+                                {
+                                    "Ref": "GigaVUEPublicIp"
+                                },
+                                "\n",
+                                "GVTAP_AMIID=",
+                                {
+                                    "Ref": "GvTapControllersAMIId"
+                                },
+                                "\n",
+                                "VSCONTLR_AMIID=",
+                                {
+                                    "Ref": "VseriesControllersAMIId"
+                                },
+                                "\n",
+                                "VSNODE_AMIID=",
+                                {
+                                    "Ref": "VseriesNodesAMIId"
+                                },
+                                "\n",
                                 "cd /home/ubuntu/\n",
                                 "wget https://s3.amazonaws.com/gigamonartifacts/scripts/cron_job.sh\n",
                                 "chmod 777 /home/ubuntu/cron_job.sh\n",
-                                "sh cron_job.sh $agent1_ip"
+                                "sh cron_job.sh $agent1_ip $FM_ID $VPC_ID $KEY_PAIR $MGMT_SUBNET $MIRROR_SUBNET $GIGAMON_SG_ID $REGION $AZZONE $NTOPNG_IP $FM_IP"
                             ]
                         ]
                     }

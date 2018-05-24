@@ -310,6 +310,12 @@
             "Value": {
                 "Ref": "GigaVUEFMInstance"
             }
+        },
+        "SGId": {
+            "Description": "The SG ID",
+            "Value": {
+                "Ref": "GigaVUEFMSG"
+            }
         }
     }
 }
