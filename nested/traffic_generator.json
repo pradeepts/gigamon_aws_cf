@@ -198,7 +198,7 @@
                                 "#!/bin/bash -ex\n",
                                 "agent1_ip=",
                                 {
-                                    "Ref": "PrivateIp"
+                                    "Ref": "GvTapPrivateIp"
                                 },
                                 "\n",
                                 "FM_ID=",

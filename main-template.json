@@ -144,17 +144,17 @@
         "GvTapControllersAMIId": {
             "Description": "GvTapControllers AMI ID",
             "Type": "String",
-            "default": "ami-89681df1"
+            "Default": "ami-89681df1"
         },
         "VseriesControllersAMIId": {
             "Description": "VseriesControllers AMI ID",
             "Type": "String",
-            "default": "ami-936e1beb"
+            "Default": "ami-936e1beb"
         },
         "VseriesNodesAMIId": {
             "Description": "VseriesNodes AMI ID",
             "Type": "String",
-            "default": "ami-556e1b2d"
+            "Default": "ami-556e1b2d"
         }
     },
     "Mappings": {},
@@ -419,10 +419,10 @@
                         "Ref": "VseriesNodesAMIId"
                     },
                     "NtopNGPrivateIp": {
-                            "Fn::GetAtt": [
-                                "NtopNGInstance",
-                                "PrivateIp"
-                            ]
+                        "Fn::GetAtt": [
+                            "NtopNG",
+                            "Outputs.PrivateIp"
+                        ]
                     }
                 },
                 "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/nested/traffic_generator.json",
