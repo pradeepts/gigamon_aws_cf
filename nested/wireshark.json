@@ -1,14 +1,14 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "Create an EC2 instance running the NtopNG AMI",
+    "Description": "Create an EC2 instance running the WireShark AMI",
     "Parameters": {
         "KeyPair": {
-            "Description": "Name of an existing EC2 Key Pair to enable SSH access to the GigaVUE-FM instances",
+            "Description": "Name of an existing EC2 Key Pair to enable SSH access to the Wireshark instances",
             "Type": "AWS::EC2::KeyPair::KeyName",
             "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
         },
         "InstanceType": {
-            "Description": "GigaVUE-FM EC2 instance type",
+            "Description": "Wireshark EC2 instance type",
             "Type": "String"
         },
         "VPC": {
@@ -18,62 +18,66 @@
         "Subnet1": {
             "Description": "subnet to launch virtual server in",
             "Type": "AWS::EC2::Subnet::Id"
+        },
+        "WiresharkRDPPassword": {
+            "Description": "Wireshark EC2 instance type",
+            "Type": "String"
         }
     },
     "Mappings": {
         "RegionMap": {
             "us-east-1": {
-                "ImageID": "ami-9f086de0"
+                "ImageID": "ami-43a15f3e"
             },
             "us-west-1": {
-                "ImageID": "ami-2cbda54c"
+                "ImageID": "ami-925144f2"
             },
             "us-east-2": {
-                "ImageID": "ami-c59ce2bd"
+                "ImageID": "ami-916f59f4"
             },
             "us-west-2": {
                 "ImageID": "ami-4e79ed36"
             },
             "sa-east-1": {
-                "ImageID": "ami-b5ecb3d9"
+                "ImageID": "ami-423d772e"
             },
             "eu-central-1": {
-                "ImageID": "ami-2fa58dc4"
+                "ImageID": "ami-7c412f13"
             },
             "ca-central-1": {
-                "ImageID": "ami-c29515a6"
+                "ImageID": "ami-ae55d2ca"
             },
             "eu-west-1": {
-                "ImageID": "ami-a26d53db"
+                "ImageID": "ami-f90a4880"
             },
             "eu-west-2": {
-                "ImageID": "ami-6a4aa80d"
+                "ImageID": "ami-f4f21593"
             },
-			"eu-west-3": {
-                "ImageID": "ami-48813035"
+            "eu-west-3": {
+                "ImageID": "ami-0e55e373"
             },
             "ap-southeast-1": {
-                "ImageID": "ami-c18cbebd"
+                "ImageID": "ami-52d4802e"
             },
             "ap-southeast-2": {
-                "ImageID": "ami-4c5b8b2e"
+                "ImageID": "ami-d38a4ab1"
             },
             "ap-northeast-1": {
-                "ImageID": "ami-1450ad6b"
+                "ImageID": "ami-0d74386b"
             },
             "ap-northeast-2": {
-                "ImageID": "ami-5b13ba35"
+                "ImageID": "ami-a414b9ca"
             },
             "ap-south-1": {
-                "ImageID": "ami-7c8ead13"
+                "ImageID": "ami-0189d76e"
             }
         }
     },
     "Resources": {
-        "NtopNGSG": {
+        "WireSharkSG": {
             "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
-                "GroupDescription": "SG for NtopNG EC2 Instance",
+                "GroupDescription": "SG for WireShark EC2 Instance",
                 "SecurityGroupIngress": [
                     {
                         "IpProtocol": "tcp",
@@ -83,8 +87,20 @@
                     },
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "3389",
-                        "ToPort": "3389",
+                        "FromPort": "443",
+                        "ToPort": "443",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "80",
+                        "ToPort": "80",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "3000",
+                        "ToPort": "3000",
                         "CidrIp": "0.0.0.0/0"
                     },
                     {
@@ -100,12 +116,12 @@
                 "Tags": [
                     {
                         "Key": "name",
-                        "Value": "NtopNG_SG"
+                        "Value": "WireShark_SG"
                     }
                 ]
             }
         },
-        "NtopNGInstance": {
+        "WireSharkInstance": {
             "Type": "AWS::EC2::Instance",
             "Properties": {
                 "KeyName": {
@@ -133,7 +149,7 @@
                         "DeviceIndex": "0",
                         "GroupSet": [
                             {
-                                "Ref": "NtopNGSG"
+                                "Ref": "WireSharkSG"
                             }
                         ]
                     }
@@ -144,12 +160,15 @@
                             "",
                             [
                                 "#!/bin/bash -ex\n",
-                                "VPCCIDR=10.0.0.0/16",
+                                "PASSWD=",
+                                {
+                                    "Ref":"WiresharkRDPPassword"
+                                },
                                 "\n",
                                 "cd /home/ubuntu/\n",
-                                "wget https://s3.amazonaws.com/gigamonartifacts/scripts/ntopng.sh\n",
-                                "chmod 777 /home/ubuntu/ntopng.sh\n",
-                                "sh ntopng.sh $VPCCIDR"
+                                "wget https://s3.amazonaws.com/gigamonartifacts/scripts/wireshark.sh\n",
+                                "chmod 777 /home/ubuntu/wireshark.sh\n",
+                                "sh wireshark.sh $PASSWD"
                             ]
                         ]
                     }
@@ -157,7 +176,7 @@
                 "Tags": [
                     {
                         "Key": "name",
-                        "Value": "NtopNG"
+                        "Value": "WireShark"
                     }
                 ]
             }
@@ -168,7 +187,7 @@
             "Description": "Server's PublicIp Address",
             "Value": {
                 "Fn::GetAtt": [
-                    "NtopNGInstance",
+                    "WireSharkInstance",
                     "PublicIp"
                 ]
             }
@@ -177,7 +196,7 @@
             "Description": "The Private IP",
             "Value": {
                 "Fn::GetAtt": [
-                    "NtopNGInstance",
+                    "WireSharkInstance",
                     "PrivateIp"
                 ]
             }

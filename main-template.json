@@ -26,6 +26,14 @@
                 },
                 {
                     "Label": {
+                        "default": "GvTapAgent Instance Configuration"
+                    },
+                    "Parameters": [
+                        "GvTapAgentInstanceType"
+                    ]
+                },
+                {
+                    "Label": {
                         "default": "NtopNG Instance Configuration"
                     },
                     "Parameters": [
@@ -34,10 +42,11 @@
                 },
                 {
                     "Label": {
-                        "default": "GvTapAgent Instance Configuration"
+                        "default": "WireShark Instance Configuration"
                     },
                     "Parameters": [
-                        "GvTapAgentInstanceType"
+                        "WiresharkInstanceType",
+                        "WiresharkRDPPassword"
                     ]
                 }
             ],
@@ -65,6 +74,12 @@
                 },
                 "VseriesNodesAMIId": {
                     "default": "VseriesNodes AMI ID"
+                },
+                "WiresharkInstanceType": {
+                    "default": "Wireshark Instance Type"
+                },
+                "WiresharkRDPPassword": {
+                    "default": "Wireshark RDP Password"
                 }
             }
         }
@@ -155,6 +170,20 @@
             "Description": "VseriesNodes AMI ID",
             "Type": "String",
             "Default": "ami-556e1b2d"
+        },
+        "WiresharkInstanceType": {
+            "Description": "Wireshark Instance Type",
+            "Type": "String",
+            "Default": "t2.medium",
+            "AllowedValues": [
+                "t2.medium",
+                "t2.large"
+            ]
+        },
+        "WiresharkRDPPassword": {
+            "Description": "Wireshark RDP Passsword",
+            "Type": "String",
+            "Default": "Wireshark@234"
         }
     },
     "Mappings": {},
@@ -359,6 +388,31 @@
                 "TimeoutInMinutes": "5"
             }
         },
+        "Wireshark": {
+            "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": "GvTapAgent",
+            "Properties": {
+                "Parameters": {
+                    "KeyPair": {
+                        "Ref": "KeyPair"
+                    },
+                    "InstanceType": {
+                        "Ref": "WiresharkInstanceType"
+                    },
+                    "VPC": {
+                        "Ref": "GigamonVPC"
+                    },
+                    "Subnet1": {
+                        "Ref": "MgmtSubnet"
+                    },
+                    "WiresharkRDPPassword": {
+                        "Ref": "WiresharkRDPPassword"
+                    }
+                },
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/nested/wireshark.json",
+                "TimeoutInMinutes": "5"
+            }
+        },
         "TrafficGenerator": {
             "Type": "AWS::CloudFormation::Stack",
             "DependsOn": "NtopNG",
@@ -421,6 +475,12 @@
                     "NtopNGPrivateIp": {
                         "Fn::GetAtt": [
                             "NtopNG",
+                            "Outputs.PrivateIp"
+                        ]
+                    },
+                    "WiresharkPrivateIp": {
+                        "Fn::GetAtt": [
+                            "Wireshark",
                             "Outputs.PrivateIp"
                         ]
                     }
