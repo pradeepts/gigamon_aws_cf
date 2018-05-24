@@ -415,7 +415,10 @@
         },
         "TrafficGenerator": {
             "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": "NtopNG",
+            "DependsOn": [
+                "NtopNG",
+                "Wireshark"
+            ],
             "Properties": {
                 "Parameters": {
                     "KeyPair": {
@@ -491,7 +494,7 @@
         }
     },
     "Outputs": {
-        "GigaVUE-FM_URL": {
+        "GigaVUEFMURL": {
             "Description": "URL for GigaVUE-FM",
             "Value": {
                 "Fn::GetAtt": [
@@ -500,10 +503,13 @@
                 ]
             }
         },
-        "InstanceId": {
+        "GigaVUEFMInstanceId": {
             "Description": "The Instance ID",
             "Value": {
-                "Ref": "GigaVUEFMInstance"
+                "Fn::GetAtt": [
+                    "GigaVUEFM",
+                    "Outputs.InstanceId"
+                ]
             }
         }
     }

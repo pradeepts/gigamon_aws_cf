@@ -1,9 +1,9 @@
 #!/bin/bash
 pwd=$1
-sudo apt-get update
 # changing the password of Ubuntu user
 sudo echo -e "$pwd\n$pwd" | sudo passwd ubuntu
 # Installation of xrdp to enable RDP and xfce4 for creation desktop environment on Ubuntu instance
+sudo apt-get update
 sudo apt-get install -y xrdp xfce4
 sudo  service xrdp restart
 #Adding Wireshark package to apt-get repository
