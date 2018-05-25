@@ -1,7 +1,5 @@
 #!/bin/bash
 pwd=$1
-# changing the password of Ubuntu user
-sudo echo -e "$pwd\n$pwd" | sudo passwd ubuntu
 # Installation of xrdp to enable RDP and xfce4 for creation desktop environment on Ubuntu instance
 sudo apt-get update
 sudo apt-get install -y xrdp xfce4
@@ -21,3 +19,5 @@ sudo apt-get install iproute2 -y
 sudo ip link add vxlan0 type vxlan id 0 group 239.1.1.1 dev eth0 dstport 4789
 sudo ip link set vxlan0 up
 sudo ufw disable
+# changing the password of Ubuntu user
+sudo echo -e "$pwd\n$pwd" | sudo passwd ubuntu
