@@ -183,7 +183,7 @@
         "WiresharkRDPPassword": {
             "Description": "Wireshark RDP Passsword",
             "Type": "String",
-            "Default": "Wireshark@234"
+            "Default": "Wireshark@1234"
         }
     },
     "Mappings": {},
@@ -337,7 +337,7 @@
                         "Ref": "MgmtSubnet"
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/nested/gigavue_fm.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_ntopng/nested/gigavue_fm.json",
                 "TimeoutInMinutes": "5"
             }
         },
@@ -362,7 +362,7 @@
                         "Ref": "MirrorSubnet"
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/nested/gvtap_agent.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_ntopng/nested/gvtap_agent.json",
                 "TimeoutInMinutes": "5"
             }
         },
@@ -384,7 +384,7 @@
                         "Ref": "MgmtSubnet"
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/nested/ntopng.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_ntopng/nested/ntopng.json",
                 "TimeoutInMinutes": "5"
             }
         },
@@ -409,7 +409,7 @@
                         "Ref": "WiresharkRDPPassword"
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/nested/wireshark.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_ntopng/nested/wireshark.json",
                 "TimeoutInMinutes": "5"
             }
         },
@@ -488,7 +488,7 @@
                         ]
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/nested/traffic_generator.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_ntopng/nested/traffic_generator.json",
                 "TimeoutInMinutes": "5"
             }
         }

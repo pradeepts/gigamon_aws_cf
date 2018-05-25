@@ -14,7 +14,7 @@ gvtap_ami_id=${12}
 vscontroller_ami_id=${13}
 vsnode_ami_id=${14}
 wireshark_ip=${15}
-wget https://s3.amazonaws.com/gigamonartifacts/scripts/traffic_generator.sh
+wget https://s3.amazonaws.com/gigamonartifacts/wireshark_ntopng/scripts/traffic_generator.sh
 chmod +x ./traffic_generator.sh
 sudo sed -i 's/$1/'$agent1_ip'/g' ./traffic_generator.sh
 sudo cp ./traffic_generator.sh /tmp/

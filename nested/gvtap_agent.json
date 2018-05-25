@@ -162,7 +162,7 @@
                                 "#!/bin/bash -ex\n",
                                 "\n",
                                 "cd /home/ubuntu/\n",
-                                "wget https://s3.amazonaws.com/gigamonartifacts/scripts/gvtap_agent.sh\n",
+                                "wget https://s3.amazonaws.com/gigamonartifacts/wireshark_ntopng/scripts/gvtap_agent.sh\n",
                                 "chmod 777 /home/ubuntu/gvtap_agent.sh\n",
                                 "sh gvtap_agent.sh"
                             ]
