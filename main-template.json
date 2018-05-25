@@ -497,7 +497,7 @@
         "GigaVUEFMURL": {
             "Description": "URL for GigaVUE-FM",
             "Value": {
-                "Fn::join": [
+                "Fn::Join": [
                     "",
                     [
                         "https://",
@@ -527,7 +527,7 @@
         "NtopNGURL": {
             "Description": "NtopNG URL",
             "Value": {
-                "Fn::join": [
+                "Fn::Join": [
                     "",
                     [
                         "http://",
@@ -554,7 +554,7 @@
             "Description": "Wireshark PublicIp",
             "Value": {
                 "Fn::GetAtt": [
-                    "GigaVUEFM",
+                    "Wireshark",
                     "Outputs.PublicIp"
                 ]
             }

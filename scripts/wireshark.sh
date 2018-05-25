@@ -1,7 +1,8 @@
 #!/bin/bash
 pwd=$1
-pstatus=`ps -eaf | grep apt.systemd.daily | wc -l`
-while [ $pstatus -gt 1 ]; do sleep 180; pstatus=`ps -eaf | grep apt.systemd.daily | wc -l`; done
+sleep 120
+# pstatus=`ps -eaf | grep apt.systemd.daily | wc -l`
+# while [ $pstatus -gt 1 ]; do sleep 180; pstatus=`ps -eaf | grep apt.systemd.daily | wc -l`; done
 # Installation of xrdp to enable RDP and xfce4 for creation desktop environment on Ubuntu instance
 sudo apt-get update
 sudo apt-get install -y xrdp xfce4
@@ -23,3 +24,4 @@ sudo ip link set vxlan0 up
 sudo ufw disable
 # changing the password of Ubuntu user
 sudo echo -e "$pwd\n$pwd" | sudo passwd ubuntu
+exit 0
