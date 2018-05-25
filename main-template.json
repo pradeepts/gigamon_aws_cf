@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "Create an EC2 instance running the latest AWS GigaVUE-FM AMI with IAM role. --AWSMP::7a18bd0d-3159-4a57-ae5e-054334defa3d::65751b6b-102f-4ea1-8395-20605876e133",
+    "Description": "Create an EC2 instances running the latest AWS GigaVUE-FM AMI with IAM role,Wireshark,NtopNG and GvTAP Agents",
     "Metadata": {
         "AWS::CloudFormation::Interface": {
             "ParameterGroups": [
@@ -97,7 +97,7 @@
             "Default": "40"
         },
         "GigaVUEFMInstanceType": {
-            "Description": "GigaVUE-FM EC2 instance type",
+            "Description": "GigaVUE-FM EC2 Instance Type",
             "Type": "String",
             "Default": "m4.xlarge",
             "AllowedValues": [
@@ -137,7 +137,7 @@
             "ConstraintDescription": "must be a valid EC2 instance type."
         },
         "NtopNGInstanceType": {
-            "Description": "NtopNG EC2 instance type",
+            "Description": "NtopNG EC2 Instance Type",
             "Type": "String",
             "Default": "t2.micro",
             "AllowedValues": [
@@ -147,7 +147,7 @@
             ]
         },
         "GvTapAgentInstanceType": {
-            "Description": "GvTapAgent EC2 instance type",
+            "Description": "GvTapAgent EC2 Instance Type",
             "Type": "String",
             "Default": "t2.micro",
             "AllowedValues": [

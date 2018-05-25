@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "Create an EC2 instance running the TF AMI",
+    "Description": "Create an EC2 instance for Traffic Generator",
     "Parameters": {
         "KeyPair": {
             "Description": "Name of an existing EC2 Key Pair to enable SSH access to the GigaVUE-FM instances",

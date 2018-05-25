@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "Create an EC2 instance running the WireShark AMI",
+    "Description": "Create an EC2 instance for WireShark",
     "Parameters": {
         "KeyPair": {
             "Description": "Name of an existing EC2 Key Pair to enable SSH access to the Wireshark instances",

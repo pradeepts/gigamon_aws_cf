@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "Create an EC2 instance running the latest AWS GigaVUE-FM AMI with IAM role. --AWSMP::7a18bd0d-3159-4a57-ae5e-054334defa3d::65751b6b-102f-4ea1-8395-20605876e133",
+    "Description": "Create an EC2 instance running the latest AWS GigaVUE-FM AMI with IAM role",
     "Parameters": {
         "KeyPair": {
             "Description": "Name of an existing EC2 Key Pair to enable SSH access to the GigaVUE-FM instances",
