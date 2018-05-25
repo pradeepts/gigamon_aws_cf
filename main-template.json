@@ -497,19 +497,76 @@
         "GigaVUEFMURL": {
             "Description": "URL for GigaVUE-FM",
             "Value": {
-                "Fn::GetAtt": [
-                    "GigaVUEFM",
-                    "Outputs.PublicIp"
+                "Fn::join": [
+                    "",
+                    [
+                        "https://",
+                        {
+                            "Fn::GetAtt": [
+                                "GigaVUEFM",
+                                "Outputs.PublicIp"
+                            ]
+                        }
+                    ]
                 ]
             }
         },
-        "GigaVUEFMInstanceId": {
+        "GigaVUEFMUsername": {
+            "Description": "The GigaVUE-FM Username",
+            "Value": "admin"
+        },
+        "GigaVUEFMPassword": {
             "Description": "The Instance ID",
             "Value": {
                 "Fn::GetAtt": [
                     "GigaVUEFM",
                     "Outputs.InstanceId"
                 ]
+            }
+        },
+        "NtopNGURL": {
+            "Description": "NtopNG URL",
+            "Value": {
+                "Fn::join": [
+                    "",
+                    [
+                        "http://",
+                        {
+                            "Fn::GetAtt": [
+                                "NtopNG",
+                                "Outputs.PublicIp"
+                            ]
+                        },
+                        ":3000"
+                    ]
+                ]
+            }
+        },
+        "NtopNGUsername": {
+            "Description": "The NtopNG Username",
+            "Value": "admin"
+        },
+        "NtopNGpassword": {
+            "Description": "The NtopNG password",
+            "Value": "admin"
+        },
+        "WiresharkPublicIp": {
+            "Description": "Wireshark PublicIp",
+            "Value": {
+                "Fn::GetAtt": [
+                    "GigaVUEFM",
+                    "Outputs.PublicIp"
+                ]
+            }
+        },
+        "WiresharkRDPUsername": {
+            "Description": "The Wireshark RDP Username",
+            "Value": "ubuntu"
+        },
+        "WiresharkRDPpassword": {
+            "Description": "The Wireshark RDP password",
+            "Value": {
+                "Ref": "WiresharkRDPPassword"
             }
         }
     }

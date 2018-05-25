@@ -156,7 +156,6 @@
                                 "cd /home/ubuntu/\n",
                                 "wget https://s3.amazonaws.com/gigamonartifacts/scripts/wireshark.sh\n",
                                 "chmod 777 /home/ubuntu/wireshark.sh\n",
-                                "sleep 30\n",
                                 "sh wireshark.sh $PASSWD"
                             ]
                         ]

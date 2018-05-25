@@ -1,5 +1,7 @@
 #!/bin/bash
 pwd=$1
+pstatus=`ps -eaf | grep apt.systemd.daily | wc -l`
+while [ $pstatus -gt 1 ]; do sleep 180; pstatus=`ps -eaf | grep apt.systemd.daily | wc -l`; done
 # Installation of xrdp to enable RDP and xfce4 for creation desktop environment on Ubuntu instance
 sudo apt-get update
 sudo apt-get install -y xrdp xfce4
