@@ -103,7 +103,7 @@
                 },
                 "Tags": [
                     {
-                        "Key": "name",
+                        "Key": "Name",
                         "Value": "WireShark_SG"
                     }
                 ]
@@ -163,7 +163,7 @@
                 },
                 "Tags": [
                     {
-                        "Key": "name",
+                        "Key": "Name",
                         "Value": "WireShark"
                     }
                 ]

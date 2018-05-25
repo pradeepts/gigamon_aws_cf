@@ -232,7 +232,7 @@
                 },
                 "Tags": [
                     {
-                        "Key": "name",
+                        "Key": "Name",
                         "Value": "Gigamon_SG"
                     }
                 ]
@@ -288,7 +288,7 @@
                 ],
                 "Tags": [
                     {
-                        "Key": "name",
+                        "Key": "Name",
                         "Value": "GigaVUE-FM"
                     }
                 ]

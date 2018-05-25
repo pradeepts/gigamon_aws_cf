@@ -155,7 +155,7 @@
                 },
                 "Tags": [
                     {
-                        "Key": "name",
+                        "Key": "Name",
                         "Value": "TF_SG"
                     }
                 ]
@@ -285,7 +285,7 @@
                 },
                 "Tags": [
                     {
-                        "Key": "name",
+                        "Key": "Name",
                         "Value": "TF"
                     }
                 ]

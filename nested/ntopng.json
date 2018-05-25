@@ -111,7 +111,7 @@
                 },
                 "Tags": [
                     {
-                        "Key": "name",
+                        "Key": "Name",
                         "Value": "NtopNG_SG"
                     }
                 ]
@@ -168,7 +168,7 @@
                 },
                 "Tags": [
                     {
-                        "Key": "name",
+                        "Key": "Name",
                         "Value": "NtopNG"
                     }
                 ]

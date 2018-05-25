@@ -195,7 +195,7 @@
                 "EnableDnsHostnames": "true",
                 "Tags": [
                     {
-                        "Key": "name",
+                        "Key": "Name",
                         "Value": "Gigamon_VPC"
                     }
                 ]
@@ -206,7 +206,7 @@
             "Properties": {
                 "Tags": [
                     {
-                        "Key": "name",
+                        "Key": "Name",
                         "Value": "Gigamon_IGW"
                     }
                 ]
@@ -240,7 +240,7 @@
                 },
                 "Tags": [
                     {
-                        "Key": "name",
+                        "Key": "Name",
                         "Value": "Gigamon_Subnet1"
                     }
                 ]
@@ -263,7 +263,7 @@
                 },
                 "Tags": [
                     {
-                        "Key": "name",
+                        "Key": "Name",
                         "Value": "Gigamon_Subnet2"
                     }
                 ]
@@ -277,7 +277,7 @@
                 },
                 "Tags": [
                     {
-                        "Key": "name",
+                        "Key": "Name",
                         "Value": "Gigamon_RTBL"
                     }
                 ]
