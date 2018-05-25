@@ -1,0 +1,573 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Create an EC2 instances running the latest AWS GigaVUE-FM AMI with IAM role,Wireshark,NtopNG and GvTAP Agents",
+    "Metadata": {
+        "AWS::CloudFormation::Interface": {
+            "ParameterGroups": [
+                {
+                    "Label": {
+                        "default": "GigaVUE-FM Instance Configuration"
+                    },
+                    "Parameters": [
+                        "KeyPair",
+                        "GigaVUEFMInstanceType",
+                        "GigaVUEFMVolumeSize"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Gigamon node's Configuration"
+                    },
+                    "Parameters": [
+                        "GvTapControllersAMIId",
+                        "VseriesControllersAMIId",
+                        "VseriesNodesAMIId"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "GvTapAgent Instance Configuration"
+                    },
+                    "Parameters": [
+                        "GvTapAgentInstanceType"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "NtopNG Instance Configuration"
+                    },
+                    "Parameters": [
+                        "NtopNGInstanceType"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "WireShark Instance Configuration"
+                    },
+                    "Parameters": [
+                        "WiresharkInstanceType",
+                        "WiresharkRDPPassword"
+                    ]
+                }
+            ],
+            "ParameterLabels": {
+                "KeyPair": {
+                    "default": "Key Pair"
+                },
+                "GigaVUEFMInstanceType": {
+                    "default": "Instance Type"
+                },
+                "GigaVUEFMVolumeSize": {
+                    "default": "Volume Size"
+                },
+                "NtopNGInstanceType": {
+                    "default": "Instance Type"
+                },
+                "GvTapAgentInstanceType": {
+                    "default": "Instance Type"
+                },
+                "GvTapControllersAMIId": {
+                    "default": "GvTapControllers AMI ID"
+                },
+                "VseriesControllersAMIId": {
+                    "default": "VseriesControllers AMI ID"
+                },
+                "VseriesNodesAMIId": {
+                    "default": "VseriesNodes AMI ID"
+                },
+                "WiresharkInstanceType": {
+                    "default": "Wireshark Instance Type"
+                },
+                "WiresharkRDPPassword": {
+                    "default": "Wireshark RDP Password"
+                }
+            }
+        }
+    },
+    "Parameters": {
+        "KeyPair": {
+            "Description": "Name of an existing EC2 Key Pair to enable SSH access to the GigaVUE-FM instances",
+            "Type": "AWS::EC2::KeyPair::KeyName",
+            "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+        },
+        "GigaVUEFMVolumeSize": {
+            "Description": "The size(GB) of the EBS volume to attach to the GigaVUE-FM instances, EBS MaxVolume Size 16TB",
+            "Type": "Number",
+            "MaxValue": "16384",
+            "Default": "40"
+        },
+        "GigaVUEFMInstanceType": {
+            "Description": "GigaVUE-FM EC2 Instance Type",
+            "Type": "String",
+            "Default": "m4.xlarge",
+            "AllowedValues": [
+                "m4.xlarge",
+                "m4.2xlarge",
+                "m4.4xlarge",
+                "m4.10xlarge",
+                "m4.16xlarge",
+                "c3.large",
+                "c3.xlarge",
+                "c3.2xlarge",
+                "c3.4xlarge",
+                "c3.8xlarge",
+                "c4.large",
+                "c4.xlarge",
+                "c4.2xlarge",
+                "c4.4xlarge",
+                "c4.8xlarge",
+                "d2.xlarge",
+                "d2.2xlarge",
+                "d2.4xlarge",
+                "d2.8xlarge",
+                "hi1.4xlarge",
+                "hs1.8xlarge",
+                "i2.xlarge",
+                "i2.2xlarge",
+                "i2.4xlarge",
+                "i2.8xlarge",
+                "r3.large",
+                "r3.xlarge",
+                "r3.2xlarge",
+                "r3.4xlarge",
+                "r3.8xlarge",
+                "x1.16xlarge",
+                "x1.32xlarge"
+            ],
+            "ConstraintDescription": "must be a valid EC2 instance type."
+        },
+        "NtopNGInstanceType": {
+            "Description": "NtopNG EC2 Instance Type",
+            "Type": "String",
+            "Default": "t2.micro",
+            "AllowedValues": [
+                "t2.micro",
+                "t2.small",
+                "t2.medium"
+            ]
+        },
+        "GvTapAgentInstanceType": {
+            "Description": "GvTapAgent EC2 Instance Type",
+            "Type": "String",
+            "Default": "t2.micro",
+            "AllowedValues": [
+                "t2.micro",
+                "t2.small",
+                "t2.medium"
+            ]
+        },
+        "GvTapControllersAMIId": {
+            "Description": "GvTapControllers AMI ID",
+            "Type": "String",
+            "Default": "ami-89681df1"
+        },
+        "VseriesControllersAMIId": {
+            "Description": "VseriesControllers AMI ID",
+            "Type": "String",
+            "Default": "ami-936e1beb"
+        },
+        "VseriesNodesAMIId": {
+            "Description": "VseriesNodes AMI ID",
+            "Type": "String",
+            "Default": "ami-556e1b2d"
+        },
+        "WiresharkInstanceType": {
+            "Description": "Wireshark Instance Type",
+            "Type": "String",
+            "Default": "t2.medium",
+            "AllowedValues": [
+                "t2.medium",
+                "t2.large"
+            ]
+        },
+        "WiresharkRDPPassword": {
+            "Description": "Wireshark RDP Passsword",
+            "Type": "String",
+            "Default": "Wireshark@1234"
+        }
+    },
+    "Mappings": {},
+    "Resources": {
+        "GigamonVPC": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "CidrBlock": "10.0.0.0/16",
+                "EnableDnsHostnames": "true",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "Gigamon_VPC"
+                    }
+                ]
+            }
+        },
+        "InternetGateway": {
+            "Type": "AWS::EC2::InternetGateway",
+            "Properties": {
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "Gigamon_IGW"
+                    }
+                ]
+            }
+        },
+        "VPCGatewayAttachment": {
+            "Type": "AWS::EC2::VPCGatewayAttachment",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "GigamonVPC"
+                },
+                "InternetGatewayId": {
+                    "Ref": "InternetGateway"
+                }
+            }
+        },
+        "MgmtSubnet": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": {
+                    "Fn::Select": [
+                        "0",
+                        {
+                            "Fn::GetAZs": ""
+                        }
+                    ]
+                },
+                "CidrBlock": "10.0.0.0/24",
+                "VpcId": {
+                    "Ref": "GigamonVPC"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "Gigamon_Subnet1"
+                    }
+                ]
+            }
+        },
+        "MirrorSubnet": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": {
+                    "Fn::Select": [
+                        "0",
+                        {
+                            "Fn::GetAZs": ""
+                        }
+                    ]
+                },
+                "CidrBlock": "10.0.1.0/24",
+                "VpcId": {
+                    "Ref": "GigamonVPC"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "Gigamon_Subnet2"
+                    }
+                ]
+            }
+        },
+        "RouteTable": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "GigamonVPC"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "Gigamon_RTBL"
+                    }
+                ]
+            }
+        },
+        "Route": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "RouteTableId": {
+                    "Ref": "RouteTable"
+                },
+                "GatewayId": {
+                    "Ref": "InternetGateway"
+                }
+            }
+        },
+        "RouteTableAssociation1": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "MgmtSubnet"
+                },
+                "RouteTableId": {
+                    "Ref": "RouteTable"
+                }
+            }
+        },
+        "RouteTableAssociation2": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "MirrorSubnet"
+                },
+                "RouteTableId": {
+                    "Ref": "RouteTable"
+                }
+            }
+        },
+        "GigaVUEFM": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "Parameters": {
+                    "KeyPair": {
+                        "Ref": "KeyPair"
+                    },
+                    "VolumeSize": {
+                        "Ref": "GigaVUEFMVolumeSize"
+                    },
+                    "InstanceType": {
+                        "Ref": "GigaVUEFMInstanceType"
+                    },
+                    "VPC": {
+                        "Ref": "GigamonVPC"
+                    },
+                    "Subnet": {
+                        "Ref": "MgmtSubnet"
+                    }
+                },
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_ntopng/nested/gigavue_fm.json",
+                "TimeoutInMinutes": "5"
+            }
+        },
+        "GvTapAgent": {
+            "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": "GigaVUEFM",
+            "Properties": {
+                "Parameters": {
+                    "KeyPair": {
+                        "Ref": "KeyPair"
+                    },
+                    "InstanceType": {
+                        "Ref": "NtopNGInstanceType"
+                    },
+                    "VPC": {
+                        "Ref": "GigamonVPC"
+                    },
+                    "Subnet1": {
+                        "Ref": "MgmtSubnet"
+                    },
+                    "Subnet2": {
+                        "Ref": "MirrorSubnet"
+                    }
+                },
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_ntopng/nested/gvtap_agent.json",
+                "TimeoutInMinutes": "5"
+            }
+        },
+        "NtopNG": {
+            "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": "GvTapAgent",
+            "Properties": {
+                "Parameters": {
+                    "KeyPair": {
+                        "Ref": "KeyPair"
+                    },
+                    "InstanceType": {
+                        "Ref": "NtopNGInstanceType"
+                    },
+                    "VPC": {
+                        "Ref": "GigamonVPC"
+                    },
+                    "Subnet1": {
+                        "Ref": "MgmtSubnet"
+                    }
+                },
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_ntopng/nested/ntopng.json",
+                "TimeoutInMinutes": "5"
+            }
+        },
+        "Wireshark": {
+            "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": "GvTapAgent",
+            "Properties": {
+                "Parameters": {
+                    "KeyPair": {
+                        "Ref": "KeyPair"
+                    },
+                    "InstanceType": {
+                        "Ref": "WiresharkInstanceType"
+                    },
+                    "VPC": {
+                        "Ref": "GigamonVPC"
+                    },
+                    "Subnet1": {
+                        "Ref": "MgmtSubnet"
+                    },
+                    "WiresharkRDPPassword": {
+                        "Ref": "WiresharkRDPPassword"
+                    }
+                },
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_ntopng/nested/wireshark.json",
+                "TimeoutInMinutes": "5"
+            }
+        },
+        "TrafficGenerator": {
+            "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": [
+                "NtopNG",
+                "Wireshark"
+            ],
+            "Properties": {
+                "Parameters": {
+                    "KeyPair": {
+                        "Ref": "KeyPair"
+                    },
+                    "InstanceType": {
+                        "Ref": "NtopNGInstanceType"
+                    },
+                    "VPC": {
+                        "Ref": "GigamonVPC"
+                    },
+                    "Subnet1": {
+                        "Ref": "MgmtSubnet"
+                    },
+                    "Subnet2": {
+                        "Ref": "MirrorSubnet"
+                    },
+                    "AvailabilityZone": {
+                        "Fn::GetAtt": [
+                            "MgmtSubnet",
+                            "AvailabilityZone"
+                        ]
+                    },
+                    "GigaVUEPublicIp": {
+                        "Fn::GetAtt": [
+                            "GigaVUEFM",
+                            "Outputs.PublicIp"
+                        ]
+                    },
+                    "GigaVUEInstanceId": {
+                        "Fn::GetAtt": [
+                            "GigaVUEFM",
+                            "Outputs.InstanceId"
+                        ]
+                    },
+                    "GigaVUESGId": {
+                        "Fn::GetAtt": [
+                            "GigaVUEFM",
+                            "Outputs.SGId"
+                        ]
+                    },
+                    "GvTapPrivateIp": {
+                        "Fn::GetAtt": [
+                            "GvTapAgent",
+                            "Outputs.PrivateIp"
+                        ]
+                    },
+                    "GvTapControllersAMIId": {
+                        "Ref": "GvTapControllersAMIId"
+                    },
+                    "VseriesControllersAMIId": {
+                        "Ref": "VseriesControllersAMIId"
+                    },
+                    "VseriesNodesAMIId": {
+                        "Ref": "VseriesNodesAMIId"
+                    },
+                    "NtopNGPrivateIp": {
+                        "Fn::GetAtt": [
+                            "NtopNG",
+                            "Outputs.PrivateIp"
+                        ]
+                    },
+                    "WiresharkPrivateIp": {
+                        "Fn::GetAtt": [
+                            "Wireshark",
+                            "Outputs.PrivateIp"
+                        ]
+                    }
+                },
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_ntopng/nested/traffic_generator.json",
+                "TimeoutInMinutes": "5"
+            }
+        }
+    },
+    "Outputs": {
+        "GigaVUEFMURL": {
+            "Description": "URL for GigaVUE-FM",
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "https://",
+                        {
+                            "Fn::GetAtt": [
+                                "GigaVUEFM",
+                                "Outputs.PublicIp"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        },
+        "GigaVUEFMUsername": {
+            "Description": "The GigaVUE-FM Username",
+            "Value": "admin"
+        },
+        "GigaVUEFMPassword": {
+            "Description": "The Instance ID",
+            "Value": {
+                "Fn::GetAtt": [
+                    "GigaVUEFM",
+                    "Outputs.InstanceId"
+                ]
+            }
+        },
+        "NtopNGURL": {
+            "Description": "NtopNG URL",
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "http://",
+                        {
+                            "Fn::GetAtt": [
+                                "NtopNG",
+                                "Outputs.PublicIp"
+                            ]
+                        },
+                        ":3000"
+                    ]
+                ]
+            }
+        },
+        "NtopNGUsername": {
+            "Description": "The NtopNG Username",
+            "Value": "admin"
+        },
+        "NtopNGpassword": {
+            "Description": "The NtopNG password",
+            "Value": "admin"
+        },
+        "WiresharkPublicIp": {
+            "Description": "Wireshark PublicIp",
+            "Value": {
+                "Fn::GetAtt": [
+                    "Wireshark",
+                    "Outputs.PublicIp"
+                ]
+            }
+        },
+        "WiresharkRDPUsername": {
+            "Description": "The Wireshark RDP Username",
+            "Value": "ubuntu"
+        },
+        "WiresharkRDPpassword": {
+            "Description": "The Wireshark RDP password",
+            "Value": {
+                "Ref": "WiresharkRDPPassword"
+            }
+        }
+    }
+}
