@@ -167,7 +167,7 @@
             ]
         },
         "TrafficGeneratorInstanceType": {
-            "Description": "GvTapAgent EC2 Instance Type",
+            "Description": "TrafficGenerator EC2 Instance Type",
             "Type": "String",
             "Default": "t2.micro",
             "AllowedValues": [
@@ -357,7 +357,7 @@
                         "Ref": "MgmtSubnet"
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_Splunk/nested/gigavue_fm.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_splunk/nested/gigavue_fm.json",
                 "TimeoutInMinutes": "5"
             }
         },
@@ -382,7 +382,7 @@
                         "Ref": "MirrorSubnet"
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_Splunk/nested/gvtap_agent.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_splunk/nested/gvtap_agent.json",
                 "TimeoutInMinutes": "5"
             }
         },
@@ -404,7 +404,7 @@
                         "Ref": "MgmtSubnet"
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_Splunk/nested/Splunk.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_splunk/nested/splunk.json",
                 "TimeoutInMinutes": "5"
             }
         },
@@ -429,7 +429,7 @@
                         "Ref": "WiresharkRDPPassword"
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_Splunk/nested/wireshark.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_splunk/nested/wireshark.json",
                 "TimeoutInMinutes": "5"
             }
         },
@@ -502,7 +502,7 @@
                         ]
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_Splunk/nested/traffic_generator.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_splunk/nested/traffic_generator.json",
                 "TimeoutInMinutes": "5"
             }
         }
@@ -551,7 +551,7 @@
                                 "Outputs.PublicIp"
                             ]
                         },
-                        ":3000"
+                        ":8000"
                     ]
                 ]
             }
@@ -562,7 +562,12 @@
         },
         "Splunkpassword": {
             "Description": "The Splunk password",
-            "Value": "admin"
+            "Value": {
+                "Fn::GetAtt": [
+                    "Splunk",
+                    "Outputs.InstanceId"
+                ]
+            }
         },
         "WiresharkPublicIp": {
             "Description": "Wireshark PublicIp",

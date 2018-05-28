@@ -191,18 +191,19 @@
         }
     },
     "Outputs": {
-        "SplunkURL": {
-            "Description": "Splunk web interface URL",
+        "PublicIp": {
+            "Description": "Server's PublicIp Address",
             "Value": {
-                "Fn::Join": [
-                    ":",
-                    [
-                        {
-                            "Ref": "SplunkIP"
-                        },
-                        "8000"
-                    ]
+                "Fn::GetAtt": [
+                    "SplunkInstance",
+                    "PublicIp"
                 ]
+            }
+        },
+        "InstanceId": {
+            "Description": "The Instance ID",
+            "Value": {
+                "Ref": "SplunkInstance"
             }
         }
     }
