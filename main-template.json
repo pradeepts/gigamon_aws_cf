@@ -34,6 +34,14 @@
                 },
                 {
                     "Label": {
+                        "default": "TrafficGenerator Instance Configuration"
+                    },
+                    "Parameters": [
+                        "TrafficGeneratorInstanceType"
+                    ]
+                },
+                {
+                    "Label": {
                         "default": "NtopNG Instance Configuration"
                     },
                     "Parameters": [
@@ -64,6 +72,9 @@
                     "default": "Instance Type"
                 },
                 "GvTapAgentInstanceType": {
+                    "default": "Instance Type"
+                },
+                "TrafficGeneratorInstanceType": {
                     "default": "Instance Type"
                 },
                 "GvTapControllersAMIId": {
@@ -148,6 +159,16 @@
         },
         "GvTapAgentInstanceType": {
             "Description": "GvTapAgent EC2 Instance Type",
+            "Type": "String",
+            "Default": "t2.micro",
+            "AllowedValues": [
+                "t2.micro",
+                "t2.small",
+                "t2.medium"
+            ]
+        },
+        "trafficGeneratorInstanceType": {
+            "Description": "TrafficGenerator EC2 Instance Type",
             "Type": "String",
             "Default": "t2.micro",
             "AllowedValues": [
@@ -350,7 +371,7 @@
                         "Ref": "KeyPair"
                     },
                     "InstanceType": {
-                        "Ref": "NtopNGInstanceType"
+                        "Ref": "GvTapAgentInstanceType"
                     },
                     "VPC": {
                         "Ref": "GigamonVPC"
@@ -425,7 +446,7 @@
                         "Ref": "KeyPair"
                     },
                     "InstanceType": {
-                        "Ref": "NtopNGInstanceType"
+                        "Ref": "TrafficGeneratorInstanceType"
                     },
                     "VPC": {
                         "Ref": "GigamonVPC"
