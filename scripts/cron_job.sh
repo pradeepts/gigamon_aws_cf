@@ -8,13 +8,12 @@ mirror_subnet_id=$6
 securitygroup_Id=$7
 region=$8
 availability_zone=$9
-ntopng_ip=${10}
-gigamon_fm_ip=${11}
-gvtap_ami_id=${12}
-vscontroller_ami_id=${13}
-vsnode_ami_id=${14}
-wireshark_ip=${15}
-wget https://s3.amazonaws.com/gigamonartifacts/wireshark_ntopng/scripts/traffic_generator.sh
+gigamon_fm_ip=${10}
+gvtap_ami_id=${11}
+vscontroller_ami_id=${12}
+vsnode_ami_id=${13}
+wireshark_ip=${14}
+wget https://s3.amazonaws.com/gigamonartifacts/wireshark_splunk/scripts/traffic_generator.sh
 chmod +x ./traffic_generator.sh
 sudo sed -i 's/$1/'$agent1_ip'/g' ./traffic_generator.sh
 sudo cp ./traffic_generator.sh /tmp/
@@ -39,10 +38,8 @@ data2="{\"id\": \"\", \"connAlias\": \"aws\",\"connId\": \"${d}\",\"imageId\": \
 sleep 140
 curl  --insecure -X POST https://$gigamon_fm_ip/api/v1.3/vfm/aws/fabricDeployment/vseriesNodes/configs  -u admin:$instance_id -d "$data2"  --header "Content-Type:application/json"
 sleep 20
-tunnel1="{\"type\": \"vxlan\",\"vxlanConfig\": {\"id\": \"1\", \"alias\": \"ntopng\",\"dstAddress\": \"$ntopng_ip\",\"dstPort\": \"4789\",\"trafficDirection\": \"out\",\"nodeIfaceSubnetCIDR\": \"\" }}"
+tunnel1="{\"type\": \"vxlan\",\"vxlanConfig\": {\"id\": \"1\", \"alias\": \"wireshark\",\"dstAddress\": \"$wireshark_ip\",\"dstPort\": \"4789\",\"trafficDirection\": \"out\",\"nodeIfaceSubnetCIDR\": \"\" }}"
 curl --insecure -X POST https://$gigamon_fm_ip/api/v1.3/vfm/tunnelSpecs -u admin:$instance_id -d "$tunnel1" --header "Content-Type:application/json"
-tunnel2="{\"type\": \"vxlan\",\"vxlanConfig\": {\"id\": \"2\", \"alias\": \"wireshark\",\"dstAddress\": \"$wireshark_ip\",\"dstPort\": \"4789\",\"trafficDirection\": \"out\",\"nodeIfaceSubnetCIDR\": \"\" }}"
-curl --insecure -X POST https://$gigamon_fm_ip/api/v1.3/vfm/tunnelSpecs -u admin:$instance_id -d "$tunnel2" --header "Content-Type:application/json"
 sleep 5
 monitoring_session="{ \"alias\": \"Session1\",\"id\": \"1\",\"connId\": \"${d}\", \"connAlias\": \"aws\", \"deployed\": true }"
 curl  --insecure  -X POST https://$gigamon_fm_ip/api/v1.3/vfm/monitoringSessions -u admin:$instance_id -d "$monitoring_session" --header "Content-Type:application/json"
