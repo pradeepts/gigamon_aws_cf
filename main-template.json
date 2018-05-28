@@ -167,7 +167,7 @@
                 "t2.medium"
             ]
         },
-        "trafficGeneratorInstanceType": {
+        "TrafficGeneratorInstanceType": {
             "Description": "TrafficGenerator EC2 Instance Type",
             "Type": "String",
             "Default": "t2.micro",
