@@ -203,6 +203,7 @@
         },
         "WiresharkRDPPassword": {
             "Description": "Wireshark RDP Passsword",
+            "NoEcho": "true",
             "Type": "String",
             "Default": "Wireshark@1234"
         }
