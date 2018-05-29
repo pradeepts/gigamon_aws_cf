@@ -1,5 +1,4 @@
 #!/bin/bash
-#NtopNG
 instance_id=$1
 vpc_id=$2
 key_pair=$3

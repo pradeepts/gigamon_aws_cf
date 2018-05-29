@@ -3,12 +3,12 @@
     "Description": "Create an EC2 instance for Traffic Generator",
     "Parameters": {
         "KeyPair": {
-            "Description": "Name of an existing EC2 Key Pair to enable SSH access to the GigaVUE-FM instances",
+            "Description": "Name of an existing EC2 Key Pair to enable SSH access to the Traffic Generator instances",
             "Type": "AWS::EC2::KeyPair::KeyName",
             "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
         },
         "InstanceType": {
-            "Description": "GigaVUE-FM EC2 instance type",
+            "Description": "Traffic Generator EC2 instance type",
             "Type": "String"
         },
         "VPC": {
@@ -55,8 +55,8 @@
             "Description": "VseriesNodes AMI ID",
             "Type": "String"
         },
-        "NtopNGPrivateIp": {
-            "Description": "NtopNG PrivateIp",
+        "SecurityOnionPrivateIp": {
+            "Description": "SecurityOnion PrivateIp",
             "Type": "String"
         },
         "WiresharkPrivateIp": {
@@ -245,9 +245,9 @@
                                     "Ref": "AvailabilityZone"
                                 },
                                 "\n",
-                                "NTOPNG_IP=",
+                                "SECURITYONION_IP=",
                                 {
-                                    "Ref":"NtopNGPrivateIp"
+                                    "Ref":"SecurityOnionPrivateIp"
                                 },
                                 "\n",
                                 "FM_IP=",
@@ -276,9 +276,9 @@
                                 },
                                 "\n",
                                 "cd /home/ubuntu/\n",
-                                "wget https://s3.amazonaws.com/gigamonartifacts/wireshark_ntopng/scripts/cron_job.sh\n",
+                                "wget https://s3.amazonaws.com/gigamonartifacts/wireshark_securityonion/scripts/cron_job.sh\n",
                                 "chmod 777 /home/ubuntu/cron_job.sh\n",
-                                "sh cron_job.sh $agent1_ip $FM_ID $VPC_ID $KEY_PAIR $MGMT_SUBNET $MIRROR_SUBNET $GIGAMON_SG_ID $REGION $AZZONE $NTOPNG_IP $FM_IP $GVTAP_AMIID $VSCONTLR_AMIID $VSNODE_AMIID $WIRESHARK_IP"
+                                "sh cron_job.sh $agent1_ip $FM_ID $VPC_ID $KEY_PAIR $MGMT_SUBNET $MIRROR_SUBNET $GIGAMON_SG_ID $REGION $AZZONE $SECURITYONION_IP $FM_IP $GVTAP_AMIID $VSCONTLR_AMIID $VSNODE_AMIID $WIRESHARK_IP"
                             ]
                         ]
                     }

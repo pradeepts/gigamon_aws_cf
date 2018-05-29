@@ -3,12 +3,12 @@
     "Description": "Create an EC2 instance for GvTapAgent",
     "Parameters": {
         "KeyPair": {
-            "Description": "Name of an existing EC2 Key Pair to enable SSH access to the GigaVUE-FM instances",
+            "Description": "Name of an existing EC2 Key Pair to enable SSH access to the GvTapAgent instances",
             "Type": "AWS::EC2::KeyPair::KeyName",
             "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
         },
         "InstanceType": {
-            "Description": "GigaVUE-FM EC2 instance type",
+            "Description": "GvTapAgent EC2 instance type",
             "Type": "String"
         },
         "VPC": {
@@ -162,7 +162,7 @@
                                 "#!/bin/bash -ex\n",
                                 "\n",
                                 "cd /home/ubuntu/\n",
-                                "wget https://s3.amazonaws.com/gigamonartifacts/wireshark_ntopng/scripts/gvtap_agent.sh\n",
+                                "wget https://s3.amazonaws.com/gigamonartifacts/wireshark_securityonion/scripts/gvtap_agent.sh\n",
                                 "chmod 777 /home/ubuntu/gvtap_agent.sh\n",
                                 "sh gvtap_agent.sh"
                             ]
