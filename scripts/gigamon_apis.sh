@@ -7,7 +7,7 @@ mirror_subnet_id=$5
 securitygroup_Id=$6
 region=$7
 availability_zone=$8
-ntopng_ip=$9
+security_onion=$9
 gigamon_fm_ip=${10}
 #Gigamon Apis
 sleep 100
@@ -27,7 +27,7 @@ data2="{\"id\": \"\", \"connAlias\": \"aws\",\"connId\": \"${d}\",\"imageId\": \
 sleep 140
 curl  --insecure -X POST https://$gigamon_fm_ip/api/v1.3/vfm/aws/fabricDeployment/vseriesNodes/configs  -u admin:$instance_id -d "$data2"  --header "Content-Type:application/json"
 sleep 20
-tunnel1="{\"type\": \"vxlan\",\"vxlanConfig\": {\"id\": \"1\", \"alias\": \"ntopng\",\"dstAddress\": \"$ntopng_ip\",\"dstPort\": \"4789\",\"trafficDirection\": \"out\",\"nodeIfaceSubnetCIDR\": \"\" }}"
+tunnel1="{\"type\": \"vxlan\",\"vxlanConfig\": {\"id\": \"1\", \"alias\": \"ntopng\",\"dstAddress\": \"$security_onion\",\"dstPort\": \"4789\",\"trafficDirection\": \"out\",\"nodeIfaceSubnetCIDR\": \"\" }}"
 curl --insecure -X POST https://$gigamon_fm_ip/api/v1.3/vfm/tunnelSpecs -u admin:$instance_id -d "$tunnel1" --header "Content-Type:application/json"
 sleep 5
 monitoring_session="{ \"alias\": \"Session1\",\"id\": \"1\",\"connId\": \"${d}\", \"connAlias\": \"aws\", \"deployed\": true }"
