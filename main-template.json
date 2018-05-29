@@ -410,7 +410,7 @@
         },
         "Wireshark": {
             "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": "GvTapAgent",
+            "DependsOn": "Splunk",
             "Properties": {
                 "Parameters": {
                     "KeyPair": {
@@ -436,7 +436,6 @@
         "TrafficGenerator": {
             "Type": "AWS::CloudFormation::Stack",
             "DependsOn": [
-                "GvTapAgent",
                 "Wireshark"
             ],
             "Properties": {

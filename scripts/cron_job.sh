@@ -21,7 +21,7 @@ SELECTED_EDITOR=/bin/nano
 sudo service cron reload
 crontab -l | { cat; echo "*/5 * * * * /tmp/traffic_generator.sh"; } | crontab -
 #Gigamon Apis
-sleep 100
+sleep 150
 conn_data="{\"id\": \"\", \"alias\": \"aws\",\"authType\": \"ec2InstanceRole\",\"regionName\": \"$region\",\"vpcId\": \"$vpc_id\",  \"availabilityZone\": \"$availability_zone\"}"
 echo $conn_data
 curl  --insecure  -X POST https://$gigamon_fm_ip/api/v1.3/vfm/aws/connections  -u admin:$instance_id -d "$conn_data" --header "Content-Type:application/json"
