@@ -241,11 +241,6 @@
                                     "Ref": "AvailabilityZone"
                                 },
                                 "\n",
-                                "NTOPNG_IP=",
-                                {
-                                    "Ref":"NtopNGPrivateIp"
-                                },
-                                "\n",
                                 "FM_IP=",
                                 {
                                     "Ref": "GigaVUEPublicIp"
