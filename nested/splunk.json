@@ -119,6 +119,12 @@
                         "FromPort": "514",
                         "ToPort": "514",
                         "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "udp",
+                        "FromPort": "2055",
+                        "ToPort": "2055",
+                        "CidrIp": "0.0.0.0/0"
                     }
                 ]
             }
@@ -202,6 +208,15 @@
             "Description": "The Instance ID",
             "Value": {
                 "Ref": "SplunkInstance"
+            }
+        },
+        "PrivateIp": {
+            "Description": "The Private IP",
+            "Value": {
+                "Fn::GetAtt": [
+                    "SplunkInstance",
+                    "PrivateIp"
+                ]
             }
         }
     }

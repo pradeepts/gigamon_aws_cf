@@ -154,7 +154,7 @@
                                 },
                                 "\n",
                                 "cd /home/ubuntu/\n",
-                                "wget https://s3.amazonaws.com/gigamonartifacts/wireshark_ntopng/scripts/wireshark.sh\n",
+                                "wget https://s3.amazonaws.com/gigamonartifacts/wireshark_splunk/scripts/wireshark.sh\n",
                                 "chmod 777 /home/ubuntu/wireshark.sh\n",
                                 "bash wireshark.sh $PASSWD"
                             ]

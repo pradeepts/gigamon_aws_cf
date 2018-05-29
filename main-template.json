@@ -569,6 +569,15 @@
                 ]
             }
         },
+        "SplunkPrivateIp": {
+            "Description": "The Splunk Private Ip",
+            "Value": {
+                "Fn::GetAtt": [
+                    "Splunk",
+                    "Outputs.PrivateIp"
+                ]
+            }
+        },
         "WiresharkPublicIp": {
             "Description": "Wireshark PublicIp",
             "Value": {
