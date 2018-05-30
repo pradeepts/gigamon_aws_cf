@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "Create an EC2 instances running the latest AWS GigaVUE-FM AMI with IAM role,Wireshark,SecurityOnion and GvTAP Agents",
+    "Description": "Create an EC2 instances running the latest AWS GigaVUE-FM AMI with IAM role,NtopNG,SecurityOnion and GvTAP Agents",
     "Metadata": {
         "AWS::CloudFormation::Interface": {
             "ParameterGroups": [
@@ -42,21 +42,20 @@
                 },
                 {
                     "Label": {
+                        "default": "NtopNG Instance Configuration"
+                    },
+                    "Parameters": [
+                        "NtopNGInstanceType"
+                    ]
+                },
+                {
+                    "Label": {
                         "default": "SecurityOnion Instance Configuration"
                     },
                     "Parameters": [
                         "SecurityOnionInstanceType",
                         "SecurityOnionUsername",
                         "SecurityOnionPassword"
-                    ]
-                },
-                {
-                    "Label": {
-                        "default": "WireShark Instance Configuration"
-                    },
-                    "Parameters": [
-                        "WiresharkInstanceType",
-                        "WiresharkRDPPassword"
                     ]
                 }
             ],
@@ -69,6 +68,9 @@
                 },
                 "GigaVUEFMVolumeSize": {
                     "default": "Volume Size"
+                },
+                "NtopNGInstanceType": {
+                    "default": "Instance Type"
                 },
                 "SecurityOnionInstanceType": {
                     "default": "Instance Type"
@@ -93,12 +95,6 @@
                 },
                 "VseriesNodesAMIId": {
                     "default": "VseriesNodes AMI ID"
-                },
-                "WiresharkInstanceType": {
-                    "default": "Wireshark Instance Type"
-                },
-                "WiresharkRDPPassword": {
-                    "default": "Wireshark RDP Password"
                 }
             }
         }
@@ -155,6 +151,16 @@
             ],
             "ConstraintDescription": "must be a valid EC2 instance type."
         },
+        "NtopNGInstanceType": {
+            "Description": "NtopNG EC2 Instance Type",
+            "Type": "String",
+            "Default": "t2.micro",
+            "AllowedValues": [
+                "t2.micro",
+                "t2.small",
+                "t2.medium"
+            ]
+        },
         "SecurityOnionInstanceType": {
             "Description": "SecurityOnion EC2 Instance Type",
             "Type": "String",
@@ -208,21 +214,6 @@
             "Description": "VseriesNodes AMI ID",
             "Type": "String",
             "Default": "ami-556e1b2d"
-        },
-        "WiresharkInstanceType": {
-            "Description": "Wireshark Instance Type",
-            "Type": "String",
-            "Default": "t2.medium",
-            "AllowedValues": [
-                "t2.medium",
-                "t2.large"
-            ]
-        },
-        "WiresharkRDPPassword": {
-            "Description": "Wireshark RDP Passsword",
-            "NoEcho": "true",
-            "Type": "String",
-            "Default": "Wireshark@1234"
         }
     },
     "Mappings": {},
@@ -376,7 +367,7 @@
                         "Ref": "MgmtSubnet"
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_securityonion/nested/gigavue_fm.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/ntopng_splunk_securityonion/nested/gigavue_fm.json",
                 "TimeoutInMinutes": "5"
             }
         },
@@ -401,7 +392,29 @@
                         "Ref": "MirrorSubnet"
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_securityonion/nested/gvtap_agent.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/ntopng_splunk_securityonion/nested/gvtap_agent.json",
+                "TimeoutInMinutes": "5"
+            }
+        },
+        "NtopNG": {
+            "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": "GvTapAgent",
+            "Properties": {
+                "Parameters": {
+                    "KeyPair": {
+                        "Ref": "KeyPair"
+                    },
+                    "InstanceType": {
+                        "Ref": "NtopNGInstanceType"
+                    },
+                    "VPC": {
+                        "Ref": "GigamonVPC"
+                    },
+                    "Subnet1": {
+                        "Ref": "MgmtSubnet"
+                    }
+                },
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_ntopng/nested/ntopng.json",
                 "TimeoutInMinutes": "5"
             }
         },
@@ -429,40 +442,14 @@
                         "Ref": "SecurityOnionPassword"
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_securityonion/nested/security_onion.json",
-                "TimeoutInMinutes": "5"
-            }
-        },
-        "Wireshark": {
-            "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": "GvTapAgent",
-            "Properties": {
-                "Parameters": {
-                    "KeyPair": {
-                        "Ref": "KeyPair"
-                    },
-                    "InstanceType": {
-                        "Ref": "WiresharkInstanceType"
-                    },
-                    "VPC": {
-                        "Ref": "GigamonVPC"
-                    },
-                    "Subnet1": {
-                        "Ref": "MgmtSubnet"
-                    },
-                    "WiresharkRDPPassword": {
-                        "Ref": "WiresharkRDPPassword"
-                    }
-                },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_securityonion/nested/wireshark.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/ntopng_splunk_securityonion/nested/security_onion.json",
                 "TimeoutInMinutes": "5"
             }
         },
         "TrafficGenerator": {
             "Type": "AWS::CloudFormation::Stack",
             "DependsOn": [
-                "SecurityOnion",
-                "Wireshark"
+                "SecurityOnion"
             ],
             "Properties": {
                 "Parameters": {
@@ -520,20 +507,20 @@
                     "VseriesNodesAMIId": {
                         "Ref": "VseriesNodesAMIId"
                     },
+                    "NtopNGPrivateIp": {
+                        "Fn::GetAtt": [
+                            "NtopNG",
+                            "Outputs.PrivateIp"
+                        ]
+                    },
                     "SecurityOnionPrivateIp": {
                         "Fn::GetAtt": [
                             "SecurityOnion",
                             "Outputs.PrivateIp"
                         ]
-                    },
-                    "WiresharkPrivateIp": {
-                        "Fn::GetAtt": [
-                            "Wireshark",
-                            "Outputs.PrivateIp"
-                        ]
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_securityonion/nested/traffic_generator.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/ntopng_splunk_securityonion/nested/traffic_generator.json",
                 "TimeoutInMinutes": "5"
             }
         }
@@ -569,6 +556,32 @@
                 ]
             }
         },
+        "NtopNGURL": {
+            "Description": "NtopNG URL",
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "http://",
+                        {
+                            "Fn::GetAtt": [
+                                "NtopNG",
+                                "Outputs.PublicIp"
+                            ]
+                        },
+                        ":3000"
+                    ]
+                ]
+            }
+        },
+        "NtopNGUsername": {
+            "Description": "The NtopNG Username",
+            "Value": "admin"
+        },
+        "NtopNGpassword": {
+            "Description": "The NtopNG password",
+            "Value": "admin"
+        },
         "SecurityOnionURL": {
             "Description": "SecurityOnion URL",
             "Value": {
@@ -596,25 +609,6 @@
             "Description": "The SecurityOnion password",
             "Value": {
                 "Ref": "SecurityOnionPassword"
-            }
-        },
-        "WiresharkPublicIp": {
-            "Description": "Wireshark PublicIp",
-            "Value": {
-                "Fn::GetAtt": [
-                    "Wireshark",
-                    "Outputs.PublicIp"
-                ]
-            }
-        },
-        "WiresharkRDPUsername": {
-            "Description": "The Wireshark RDP Username",
-            "Value": "ubuntu"
-        },
-        "WiresharkRDPpassword": {
-            "Description": "The Wireshark RDP password",
-            "Value": {
-                "Ref": "WiresharkRDPPassword"
             }
         }
     }
