@@ -55,12 +55,12 @@
             "Description": "VseriesNodes AMI ID",
             "Type": "String"
         },
-        "NtopNGPrivateIp": {
-            "Description": "NtopNG PrivateIp",
-            "Type": "String"
-        },
         "SecurityOnionPrivateIp": {
             "Description": "SecurityOnion PrivateIp",
+            "Type": "String"
+        },
+        "WiresharkPrivateIp": {
+            "Description": "Wireshark PrivateIp",
             "Type": "String"
         }
     },
@@ -245,11 +245,6 @@
                                     "Ref": "AvailabilityZone"
                                 },
                                 "\n",
-                                "NTOPNG_IP=",
-                                {
-                                    "Ref":"NtopNGPrivateIp"
-                                },
-                                "\n",
                                 "SECURITYONION_IP=",
                                 {
                                     "Ref":"SecurityOnionPrivateIp"
@@ -275,10 +270,15 @@
                                     "Ref": "VseriesNodesAMIId"
                                 },
                                 "\n",
+                                "WIRESHARK_IP=",
+                                {
+                                    "Ref": "WiresharkPrivateIp"
+                                },
+                                "\n",
                                 "cd /home/ubuntu/\n",
-                                "wget https://s3.amazonaws.com/gigamonartifacts/ntopng_splunk_securityonion/scripts/cron_job.sh\n",
+                                "wget https://s3.amazonaws.com/gigamonartifacts/wireshark_securityonion/scripts/cron_job.sh\n",
                                 "chmod 777 /home/ubuntu/cron_job.sh\n",
-                                "sh cron_job.sh $agent1_ip $FM_ID $VPC_ID $KEY_PAIR $MGMT_SUBNET $MIRROR_SUBNET $GIGAMON_SG_ID $REGION $AZZONE $NTOPNG_IP $SECURITYONION_IP $FM_IP $GVTAP_AMIID $VSCONTLR_AMIID $VSNODE_AMIID"
+                                "sh cron_job.sh $agent1_ip $FM_ID $VPC_ID $KEY_PAIR $MGMT_SUBNET $MIRROR_SUBNET $GIGAMON_SG_ID $REGION $AZZONE $SECURITYONION_IP $FM_IP $GVTAP_AMIID $VSCONTLR_AMIID $VSNODE_AMIID $WIRESHARK_IP"
                             ]
                         ]
                     }

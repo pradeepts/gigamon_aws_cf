@@ -1,14 +1,14 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "Create an EC2 instance for SecurityOnion",
+    "Description": "Create an EC2 instance for WireShark",
     "Parameters": {
         "KeyPair": {
-            "Description": "Name of an existing EC2 Key Pair to enable SSH access to the SecurityOnion instance",
+            "Description": "Name of an existing EC2 Key Pair to enable SSH access to the Wireshark instances",
             "Type": "AWS::EC2::KeyPair::KeyName",
             "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
         },
         "InstanceType": {
-            "Description": "SecurityOnion EC2 instance type",
+            "Description": "Wireshark EC2 instance type",
             "Type": "String"
         },
         "VPC": {
@@ -19,70 +19,65 @@
             "Description": "subnet to launch virtual server in",
             "Type": "AWS::EC2::Subnet::Id"
         },
-        "SecurityOnionUsername": {
-            "Description": "SecurityOnion Username",
-            "Type": "String"
-        },
-        "SecurityOnionPassword": {
-            "Description": "SecurityOnion Password",
-            "NoEcho": "true",
+        "WiresharkRDPPassword": {
+            "Description": "Wireshark EC2 instance type",
             "Type": "String"
         }
     },
     "Mappings": {
         "RegionMap": {
             "us-east-1": {
-                "ImageID": "ami-9f086de0"
+                "ImageID": "ami-a4dc46db"
             },
             "us-west-1": {
-                "ImageID": "ami-2cbda54c"
+                "ImageID": "ami-8d948ced"
             },
             "us-east-2": {
-                "ImageID": "ami-7d132e18"
+                "ImageID": "ami-6a003c0f"
             },
             "us-west-2": {
-                "ImageID": "ami-c59ce2bd"
+                "ImageID": "ami-db710fa3"
             },
             "sa-east-1": {
-                "ImageID": "ami-b5ecb3d9"
+                "ImageID": "ami-67fca30b"
             },
             "eu-central-1": {
-                "ImageID": "ami-2fa58dc4"
+                "ImageID": "ami-c7e0c82c"
             },
             "ca-central-1": {
-                "ImageID": "ami-c29515a6"
+                "ImageID": "ami-7e21a11a"
             },
             "eu-west-1": {
-                "ImageID": "ami-a26d53db"
+                "ImageID": "ami-58d7e821"
             },
             "eu-west-2": {
-                "ImageID": "ami-6a4aa80d"
+                "ImageID": "ami-5daa463a"
             },
-			"eu-west-3": {
-                "ImageID": "ami-48813035"
+            "eu-west-3": {
+                "ImageID": "ami-1960d164"
             },
             "ap-southeast-1": {
-                "ImageID": "ami-c18cbebd"
+                "ImageID": "ami-81cefcfd"
             },
             "ap-southeast-2": {
-                "ImageID": "ami-4c5b8b2e"
+                "ImageID": "ami-963cecf4"
             },
             "ap-northeast-1": {
-                "ImageID": "ami-1450ad6b"
+                "ImageID": "ami-48a45937"
             },
             "ap-northeast-2": {
-                "ImageID": "ami-5b13ba35"
+                "ImageID": "ami-f030989e"
             },
             "ap-south-1": {
-                "ImageID": "ami-7c8ead13"
+                "ImageID": "ami-41e9c52e"
             }
         }
     },
     "Resources": {
-        "SecurityOnionSG": {
+        "WireSharkSG": {
             "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
-                "GroupDescription": "SG for SecurityOnion EC2 Instance",
+                "GroupDescription": "SG for WireShark EC2 Instance",
                 "SecurityGroupIngress": [
                     {
                         "IpProtocol": "tcp",
@@ -92,20 +87,8 @@
                     },
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "443",
-                        "ToPort": "443",
-                        "CidrIp": "0.0.0.0/0"
-                    },
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "80",
-                        "ToPort": "80",
-                        "CidrIp": "0.0.0.0/0"
-                    },
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "3000",
-                        "ToPort": "3000",
+                        "FromPort": "3389",
+                        "ToPort": "3389",
                         "CidrIp": "0.0.0.0/0"
                     },
                     {
@@ -121,12 +104,12 @@
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "SecurityOnion_SG"
+                        "Value": "WireShark_SG"
                     }
                 ]
             }
         },
-        "SecurityOnionInstance": {
+        "WireSharkInstance": {
             "Type": "AWS::EC2::Instance",
             "Properties": {
                 "KeyName": {
@@ -154,7 +137,7 @@
                         "DeviceIndex": "0",
                         "GroupSet": [
                             {
-                                "Ref": "SecurityOnionSG"
+                                "Ref": "WireSharkSG"
                             }
                         ]
                     }
@@ -165,20 +148,15 @@
                             "",
                             [
                                 "#!/bin/bash -ex\n",
-                                "username=",
+                                "PASSWD=",
                                 {
-                                    "Ref":"SecurityOnionUsername"
-                                },
-                                "\n",
-                                "password=",
-                                {
-                                    "Ref": "SecurityOnionPassword"
+                                    "Ref":"WiresharkRDPPassword"
                                 },
                                 "\n",
                                 "cd /home/ubuntu/\n",
-                                "wget https://s3.amazonaws.com/gigamonartifacts/wireshark_securityonion/scripts/security_onion.sh\n",
-                                "chmod 777 /home/ubuntu/security_onion.sh\n",
-                                "sh security_onion.sh $username $password"
+                                "wget https://s3.amazonaws.com/gigamonartifacts/wireshark_securityonion/scripts/wireshark.sh\n",
+                                "chmod 777 /home/ubuntu/wireshark.sh\n",
+                                "bash wireshark.sh $PASSWD"
                             ]
                         ]
                     }
@@ -186,7 +164,7 @@
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "SecurityOnion"
+                        "Value": "WireShark"
                     }
                 ]
             }
@@ -197,7 +175,7 @@
             "Description": "Server's PublicIp Address",
             "Value": {
                 "Fn::GetAtt": [
-                    "SecurityOnionInstance",
+                    "WireSharkInstance",
                     "PublicIp"
                 ]
             }
@@ -206,7 +184,7 @@
             "Description": "The Private IP",
             "Value": {
                 "Fn::GetAtt": [
-                    "SecurityOnionInstance",
+                    "WireSharkInstance",
                     "PrivateIp"
                 ]
             }
