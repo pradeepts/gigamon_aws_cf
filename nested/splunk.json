@@ -1,0 +1,223 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Create a single node Splunk installation.",
+    "Parameters": {
+        "KeyPair": {
+            "Description": "Name of an existing EC2 Key Pair to enable SSH access to the Splunk instances",
+            "Type": "AWS::EC2::KeyPair::KeyName",
+            "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+        },
+        "InstanceType": {
+            "Description": "Splunk EC2 instance type",
+            "Type": "String"
+        },
+        "VPC": {
+            "Description": "VPC to launch virtual server in",
+            "Type": "AWS::EC2::VPC::Id"
+        },
+        "Subnet1": {
+            "Description": "subnet to launch virtual server in",
+            "Type": "AWS::EC2::Subnet::Id"
+        }
+    },
+    "Mappings": {
+        "AWSAMIRegionMap": {
+            "AMI": {
+                "SPLUNKENTHVM": "splunk_marketplace_AMI_2017-10-17_01_26_27-7b65de6c-5006-4ca2-bd75-fdba95ae5d9d-ami-026fb978.4"
+            },
+            "ap-northeast-1": {
+                "SPLUNKENTHVM": "ami-6d94360b"
+            },
+            "ap-northeast-2": {
+                "SPLUNKENTHVM": "ami-a2c460cc"
+            },
+            "ap-south-1": {
+                "SPLUNKENTHVM": "ami-4a561b25"
+            },
+            "ap-southeast-1": {
+                "SPLUNKENTHVM": "ami-7f1f5d1c"
+            },
+            "ap-southeast-2": {
+                "SPLUNKENTHVM": "ami-bf7996dd"
+            },
+            "ca-central-1": {
+                "SPLUNKENTHVM": "ami-0165dd65"
+            },
+            "eu-central-1": {
+                "SPLUNKENTHVM": "ami-4a259f25"
+            },
+            "eu-west-1": {
+                "SPLUNKENTHVM": "ami-ad02a5d4"
+            },
+            "eu-west-2": {
+                "SPLUNKENTHVM": "ami-77514d13"
+            },
+            "sa-east-1": {
+                "SPLUNKENTHVM": "ami-1b91e977"
+            },
+            "us-east-1": {
+                "SPLUNKENTHVM": "ami-a0c06cda"
+            },
+            "us-east-2": {
+                "SPLUNKENTHVM": "ami-7f456a1a"
+            },
+            "us-west-1": {
+                "SPLUNKENTHVM": "ami-e6b98586"
+            },
+            "us-west-2": {
+                "SPLUNKENTHVM": "ami-5b6ca523"
+            }
+        }
+    },
+    "Resources": {
+        "SplunkSG": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "GroupDescription": "Enable SSH, and all Splunk-related ports except web interface",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "22",
+                        "ToPort": "22",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8000",
+                        "ToPort": "8000",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8089",
+                        "ToPort": "8089",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9997",
+                        "ToPort": "9997",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9997",
+                        "ToPort": "9997",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9997",
+                        "ToPort": "9997",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "udp",
+                        "FromPort": "514",
+                        "ToPort": "514",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "udp",
+                        "FromPort": "2055",
+                        "ToPort": "2055",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ]
+            }
+        },
+        "SplunkInstance": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "ImageId": {
+                    "Fn::FindInMap": [
+                        "AWSAMIRegionMap",
+                        {
+                            "Ref": "AWS::Region"
+                        },
+                        "SPLUNKENTHVM"
+                    ]
+                },
+                "InstanceType": {
+                    "Ref": "InstanceType"
+                },
+                "KeyName": {
+                    "Ref": "KeyPair"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "splunk"
+                    }
+                ],
+                "NetworkInterfaces": [
+                    {
+                        "AssociatePublicIpAddress": "True",
+                        "DeleteOnTermination": "True",
+                        "SubnetId": {
+                            "Ref": "Subnet1"
+                        },
+                        "DeviceIndex": "0",
+                        "GroupSet": [
+                            {
+                                "Ref": "SplunkSG"
+                            }
+                        ]
+                    }
+                ],
+                "BlockDeviceMappings": [
+                    {
+                        "DeviceName": "/dev/xvda",
+                        "Ebs": {
+                            "DeleteOnTermination": "true",
+                            "VolumeSize": "50"
+                        }
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash -v\n",
+                                "cd /home/ec2-user/\n",
+                                "wget https://s3.amazonaws.com/gigamonartifacts/wireshark_splunk/scripts/splunk.sh\n",
+                                "chmod 777 /home/ec2-user/splunk.sh\n",
+                                "bash splunk.sh"
+                            ]
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "PublicIp": {
+            "Description": "Server's PublicIp Address",
+            "Value": {
+                "Fn::GetAtt": [
+                    "SplunkInstance",
+                    "PublicIp"
+                ]
+            }
+        },
+        "InstanceId": {
+            "Description": "The Instance ID",
+            "Value": {
+                "Ref": "SplunkInstance"
+            }
+        },
+        "PrivateIp": {
+            "Description": "The Private IP",
+            "Value": {
+                "Fn::GetAtt": [
+                    "SplunkInstance",
+                    "PrivateIp"
+                ]
+            }
+        }
+    }
+}
