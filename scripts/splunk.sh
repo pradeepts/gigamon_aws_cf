@@ -1,8 +1,8 @@
 #!/bin/bash
-wget https://s3.amazonaws.com/gigamonartifacts/wireshark_splunk/scripts/splunk-stream_711.tgz
+wget https://s3.amazonaws.com/gigamonartifacts/ntopng_splunk_securityonion/scripts/splunk-stream_711.tgz
 tar -xvzf splunk-stream_711.tgz
 sudo cp -r ./splunk_app_stream/ /opt/splunk/etc/apps/
-wget https://s3.amazonaws.com/gigamonartifacts/wireshark_splunk/scripts/gigamon-ipfix-metadata-application-for-splunk_110.tgz
+wget https://s3.amazonaws.com/gigamonartifacts/ntopng_splunk_securityonion/scripts/gigamon-ipfix-metadata-application-for-splunk_110.tgz
 tar -xvzf gigamon-ipfix-metadata-application-for-splunk_110.tgz
 sudo cp -r ./GigamonIPFIXForSplunk/ /opt/splunk/etc/apps/
 cd /opt/splunk/bin/

@@ -184,7 +184,7 @@
                             [
                                 "#!/bin/bash -v\n",
                                 "cd /home/ec2-user/\n",
-                                "wget https://s3.amazonaws.com/gigamonartifacts/wireshark_splunk/scripts/splunk.sh\n",
+                                "wget https://s3.amazonaws.com/gigamonartifacts/ntopng_splunk_securityonion/scripts/splunk.sh\n",
                                 "chmod 777 /home/ec2-user/splunk.sh\n",
                                 "bash splunk.sh"
                             ]
