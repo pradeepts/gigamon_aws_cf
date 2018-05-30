@@ -150,10 +150,10 @@
         "SecurityOnionInstanceType": {
             "Description": "SecurityOnion EC2 Instance Type",
             "Type": "String",
-            "Default": "t2.medium",
+            "Default": "t2.large",
             "AllowedValues": [
-                "t2.medium",
-                "t2.large"
+                "t2.large",
+                "t2.xlarge"
             ]
         },
         "GvTapAgentInstanceType": {
