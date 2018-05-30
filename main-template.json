@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "Create an EC2 instances running the latest AWS GigaVUE-FM AMI with IAM role,NtopNG,SecurityOnion and GvTAP Agents",
+    "Description": "Create an EC2 instances running the latest AWS GigaVUE-FM AMI with IAM role,NtopNG,Splunk,SecurityOnion and GvTAP Agents",
     "Metadata": {
         "AWS::CloudFormation::Interface": {
             "ParameterGroups": [
@@ -50,6 +50,14 @@
                 },
                 {
                     "Label": {
+                        "default": "Splunk Instance Configuration"
+                    },
+                    "Parameters": [
+                        "SplunkInstanceType"
+                    ]
+                },
+                {
+                    "Label": {
                         "default": "SecurityOnion Instance Configuration"
                     },
                     "Parameters": [
@@ -68,6 +76,9 @@
                 },
                 "GigaVUEFMVolumeSize": {
                     "default": "Volume Size"
+                },
+                "SplunkInstanceType": {
+                    "default": "Instance Type"
                 },
                 "NtopNGInstanceType": {
                     "default": "Instance Type"
@@ -150,6 +161,15 @@
                 "x1.32xlarge"
             ],
             "ConstraintDescription": "must be a valid EC2 instance type."
+        },
+        "SplunkInstanceType": {
+            "Description": "Splunk EC2 Instance Type",
+            "Type": "String",
+            "Default": "t2.medium",
+            "AllowedValues": [
+                "t2.medium",
+                "t2.large"
+            ]
         },
         "NtopNGInstanceType": {
             "Description": "NtopNG EC2 Instance Type",
@@ -418,6 +438,28 @@
                 "TimeoutInMinutes": "5"
             }
         },
+        "Splunk": {
+            "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": "GvTapAgent",
+            "Properties": {
+                "Parameters": {
+                    "KeyPair": {
+                        "Ref": "KeyPair"
+                    },
+                    "InstanceType": {
+                        "Ref": "SplunkInstanceType"
+                    },
+                    "VPC": {
+                        "Ref": "GigamonVPC"
+                    },
+                    "Subnet1": {
+                        "Ref": "MgmtSubnet"
+                    }
+                },
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/ntopng_splunk_securityonion/nested/splunk.json",
+                "TimeoutInMinutes": "5"
+            }
+        },
         "SecurityOnion": {
             "Type": "AWS::CloudFormation::Stack",
             "DependsOn": "GvTapAgent",
@@ -553,6 +595,24 @@
                 "Fn::GetAtt": [
                     "GigaVUEFM",
                     "Outputs.InstanceId"
+                ]
+            }
+        },
+        "SplunkURL": {
+            "Description": "Splunk URL",
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "http://",
+                        {
+                            "Fn::GetAtt": [
+                                "Splunk",
+                                "Outputs.PublicIp"
+                            ]
+                        },
+                        ":8000"
+                    ]
                 ]
             }
         },
