@@ -29,10 +29,10 @@
                 "ImageID": "ami-2cbda54c"
             },
             "us-east-2": {
-                "ImageID": "ami-c59ce2bd"
+                "ImageID": "ami-7d132e18"
             },
             "us-west-2": {
-                "ImageID": "ami-4e79ed36"
+                "ImageID": "ami-c59ce2bd"
             },
             "sa-east-1": {
                 "ImageID": "ami-b5ecb3d9"
