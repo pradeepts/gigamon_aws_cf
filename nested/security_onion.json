@@ -165,12 +165,12 @@
                             "",
                             [
                                 "#!/bin/bash -ex\n",
-                                "SO_USERNAME=",
+                                "username=",
                                 {
                                     "Ref":"SecurityOnionUsername"
                                 },
                                 "\n",
-                                "SO_PASSWORD=",
+                                "password=",
                                 {
                                     "Ref": "SecurityOnionPassword"
                                 },
@@ -178,7 +178,7 @@
                                 "cd /home/ubuntu/\n",
                                 "wget https://s3.amazonaws.com/gigamonartifacts/wireshark_securityonion/scripts/security_onion.sh\n",
                                 "chmod 777 /home/ubuntu/security_onion.sh\n",
-                                "sh security_onion.sh $SO_USERNAME $SO_PASSWORD"
+                                "sh security_onion.sh $username $password"
                             ]
                         ]
                     }
