@@ -159,7 +159,7 @@
                                 "VPCCIDR=10.0.0.0/16",
                                 "\n",
                                 "cd /home/ubuntu/\n",
-                                "wget https://s3.amazonaws.com/gigamonartifacts/wireshark_ntopng/scripts/ntopng.sh\n",
+                                "wget https://s3.amazonaws.com/gigamonartifacts/ntopng_splunk_securityonion/scripts/ntopng.sh\n",
                                 "chmod 777 /home/ubuntu/ntopng.sh\n",
                                 "sh ntopng.sh $VPCCIDR"
                             ]
