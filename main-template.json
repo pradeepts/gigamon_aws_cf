@@ -616,6 +616,15 @@
                 ]
             }
         },
+        "SplunkPrivateIp": {
+            "Description": "The Splunk Private Ip",
+            "Value": {
+                "Fn::GetAtt": [
+                    "Splunk",
+                    "Outputs.PrivateIp"
+                ]
+            }
+        },
         "NtopNGURL": {
             "Description": "NtopNG URL",
             "Value": {
