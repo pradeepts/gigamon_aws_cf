@@ -3,7 +3,7 @@
     "Description": "Create an EC2 instance for SecurityOnion",
     "Parameters": {
         "KeyPair": {
-            "Description": "Name of an existing EC2 Key Pair to enable SSH access to the SecurityOnion instances",
+            "Description": "Name of an existing EC2 Key Pair to enable SSH access to the SecurityOnion instance",
             "Type": "AWS::EC2::KeyPair::KeyName",
             "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
         },
@@ -18,6 +18,15 @@
         "Subnet1": {
             "Description": "subnet to launch virtual server in",
             "Type": "AWS::EC2::Subnet::Id"
+        },
+        "SecurityOnionUsername": {
+            "Description": "SecurityOnion Username",
+            "Type": "String"
+        },
+        "SecurityOnionPassword": {
+            "Description": "SecurityOnion Password",
+            "NoEcho": "true",
+            "Type": "String"
         }
     },
     "Mappings": {
@@ -156,10 +165,20 @@
                             "",
                             [
                                 "#!/bin/bash -ex\n",
+                                "SO_USERNAME=",
+                                {
+                                    "Ref":"SecurityOnionUsername"
+                                },
+                                "\n",
+                                "SO_PASSWORD=",
+                                {
+                                    "Ref": "SecurityOnionPassword"
+                                },
+                                "\n",
                                 "cd /home/ubuntu/\n",
                                 "wget https://s3.amazonaws.com/gigamonartifacts/wireshark_securityonion/scripts/security_onion.sh\n",
                                 "chmod 777 /home/ubuntu/security_onion.sh\n",
-                                "sh security_onion.sh"
+                                "sh security_onion.sh $SO_USERNAME $SO_PASSWORD"
                             ]
                         ]
                     }

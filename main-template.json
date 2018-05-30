@@ -45,7 +45,9 @@
                         "default": "SecurityOnion Instance Configuration"
                     },
                     "Parameters": [
-                        "SecurityOnionInstanceType"
+                        "SecurityOnionInstanceType",
+                        "SecurityOnionUsername",
+                        "SecurityOnionPassword"
                     ]
                 },
                 {
@@ -70,6 +72,12 @@
                 },
                 "SecurityOnionInstanceType": {
                     "default": "Instance Type"
+                },
+                "SecurityOnionUsername ": {
+                    "default": "SecurityOnion Username"
+                },
+                "SecurityOnionPassword": {
+                    "default": "SecurityOnion Password"
                 },
                 "GvTapAgentInstanceType": {
                     "default": "Instance Type"
@@ -155,6 +163,16 @@
                 "t2.large",
                 "t2.xlarge"
             ]
+        },
+        "SecurityOnionUsername": {
+            "Description": "SecurityOnion Username",
+            "Type": "String"
+        },
+        "SecurityOnionPassword": {
+            "Description": "SecurityOnion Password",
+            "NoEcho": "true",
+            "Type": "String",
+            "Default": "SecOni@1234"
         },
         "GvTapAgentInstanceType": {
             "Description": "GvTapAgent EC2 Instance Type",
@@ -403,6 +421,12 @@
                     },
                     "Subnet1": {
                         "Ref": "MgmtSubnet"
+                    },
+                    "SecurityOnionUsername": {
+                        "Ref": "SecurityOnionUsername"
+                    },
+                    "SecurityOnionPassword": {
+                        "Ref": "SecurityOnionPassword"
                     }
                 },
                 "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_securityonion/nested/security_onion.json",
@@ -564,11 +588,15 @@
         },
         "SecurityOnionUsername": {
             "Description": "The SecurityOnion Username",
-            "Value": "admin"
+            "Value": {
+                "Ref": "SecurityOnionUsername"
+            }
         },
         "SecurityOnionPassword": {
             "Description": "The SecurityOnion password",
-            "Value": "admin"
+            "Value": {
+                "Ref": "SecurityOnionPassword"
+            }
         },
         "WiresharkPublicIp": {
             "Description": "Wireshark PublicIp",

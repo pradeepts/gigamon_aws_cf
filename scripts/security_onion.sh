@@ -1,4 +1,6 @@
 #!/bin/bash
+username=$1
+password=$2
 sudo ip link add vxlan0 type vxlan id 0 group 239.1.1.1 dev eth0 port 4789 4789
 sudo ip link set vxlan0 up
 echo "debconf debconf/frontend select noninteractive" | sudo debconf-set-selections
@@ -9,8 +11,8 @@ sudo add-apt-repository -y ppa:securityonion/stable
 sudo apt-get update
 sudo apt-get -y install securityonion-all syslog-ng-core
 sudo sed -i 's/eth1/vxlan0/g' /usr/share/securityonion/sosetup.conf
-sudo sed -i 's/onionuser/admin/g' /usr/share/securityonion/sosetup.conf
-sudo sed -i 's/asdfasdf/seconion@123/g' /usr/share/securityonion/sosetup.conf
+sudo sed -i 's/onionuser/$username/g' /usr/share/securityonion/sosetup.conf
+sudo sed -i 's/asdfasdf/$password/g' /usr/share/securityonion/sosetup.conf
 sudo sosetup -f /usr/share/securityonion/sosetup.conf  -y
 sudo ufw disable
 sudo apt install securityonion-elastic  -y
