@@ -551,7 +551,7 @@
                 "Fn::Join": [
                     "",
                     [
-                        "http://",
+                        "https://",
                         {
                             "Fn::GetAtt": [
                                 "SecurityOnion",
