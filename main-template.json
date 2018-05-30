@@ -376,7 +376,7 @@
                         "Ref": "MgmtSubnet"
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_securityonion/nested/gigavue_fm.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/ntopng_splunk_securityonion/nested/gigavue_fm.json",
                 "TimeoutInMinutes": "5"
             }
         },
@@ -401,7 +401,7 @@
                         "Ref": "MirrorSubnet"
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_securityonion/nested/gvtap_agent.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/ntopng_splunk_securityonion/nested/gvtap_agent.json",
                 "TimeoutInMinutes": "5"
             }
         },
@@ -429,7 +429,7 @@
                         "Ref": "SecurityOnionPassword"
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_securityonion/nested/security_onion.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/ntopng_splunk_securityonion/nested/security_onion.json",
                 "TimeoutInMinutes": "5"
             }
         },
@@ -454,7 +454,7 @@
                         "Ref": "WiresharkRDPPassword"
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_securityonion/nested/wireshark.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/ntopng_splunk_securityonion/nested/wireshark.json",
                 "TimeoutInMinutes": "5"
             }
         },
@@ -533,7 +533,7 @@
                         ]
                     }
                 },
-                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/wireshark_securityonion/nested/traffic_generator.json",
+                "TemplateURL": "https://s3.amazonaws.com/gigamonartifacts/ntopng_splunk_securityonion/nested/traffic_generator.json",
                 "TimeoutInMinutes": "5"
             }
         }
