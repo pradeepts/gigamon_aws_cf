@@ -180,17 +180,17 @@
         "GvTapControllersAMIId": {
             "Description": "GvTapControllers AMI ID",
             "Type": "String",
-            "Default": "ami-89681df1"
+            "Default": ""
         },
         "VseriesControllersAMIId": {
             "Description": "VseriesControllers AMI ID",
             "Type": "String",
-            "Default": "ami-936e1beb"
+            "Default": ""
         },
         "VseriesNodesAMIId": {
             "Description": "VseriesNodes AMI ID",
             "Type": "String",
-            "Default": "ami-556e1b2d"
+            "Default": ""
         },
         "WiresharkInstanceType": {
             "Description": "Wireshark Instance Type",
@@ -204,8 +204,7 @@
         "WiresharkRDPPassword": {
             "Description": "Wireshark RDP Passsword",
             "NoEcho": "true",
-            "Type": "String",
-            "Default": "Wireshark@1234"
+            "Type": "String"
         }
     },
     "Mappings": {},
