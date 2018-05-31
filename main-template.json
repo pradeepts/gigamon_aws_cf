@@ -178,18 +178,15 @@
         },
         "GvTapControllersAMIId": {
             "Description": "GvTapControllers AMI ID",
-            "Type": "String",
-            "Default": "ami-89681df1"
+            "Type": "String"
         },
         "VseriesControllersAMIId": {
             "Description": "VseriesControllers AMI ID",
-            "Type": "String",
-            "Default": "ami-936e1beb"
+            "Type": "String"
         },
         "VseriesNodesAMIId": {
             "Description": "VseriesNodes AMI ID",
-            "Type": "String",
-            "Default": "ami-556e1b2d"
+            "Type": "String"
         },
         "WiresharkInstanceType": {
             "Description": "Wireshark Instance Type",
@@ -203,8 +200,7 @@
         "WiresharkRDPPassword": {
             "Description": "Wireshark RDP Passsword",
             "NoEcho": "true",
-            "Type": "String",
-            "Default": "Wireshark@1234"
+            "Type": "String"
         }
     },
     "Mappings": {},
@@ -462,10 +458,10 @@
                             "AvailabilityZone"
                         ]
                     },
-                    "GigaVUEPublicIp": {
+                    "GigaVUEPublicDnsName": {
                         "Fn::GetAtt": [
                             "GigaVUEFM",
-                            "Outputs.PublicIp"
+                            "Outputs.PublicDnsName"
                         ]
                     },
                     "GigaVUEInstanceId": {
@@ -518,7 +514,7 @@
                         {
                             "Fn::GetAtt": [
                                 "GigaVUEFM",
-                                "Outputs.PublicIp"
+                                "Outputs.PublicDnsName"
                             ]
                         }
                     ]
@@ -548,24 +544,11 @@
                         {
                             "Fn::GetAtt": [
                                 "Splunk",
-                                "Outputs.PublicIp"
+                                "Outputs.PublicDnsName"
                             ]
                         },
                         ":8000"
                     ]
-                ]
-            }
-        },
-        "SplunkUsername": {
-            "Description": "The Splunk Username",
-            "Value": "admin"
-        },
-        "Splunkpassword": {
-            "Description": "The Splunk password",
-            "Value": {
-                "Fn::GetAtt": [
-                    "Splunk",
-                    "Outputs.InstanceId"
                 ]
             }
         },
@@ -578,12 +561,12 @@
                 ]
             }
         },
-        "WiresharkPublicIp": {
-            "Description": "Wireshark PublicIp",
+        "WiresharkPublicDnsName": {
+            "Description": "Wireshark PublicDnsName",
             "Value": {
                 "Fn::GetAtt": [
                     "Wireshark",
-                    "Outputs.PublicIp"
+                    "Outputs.PublicDnsName"
                 ]
             }
         },
