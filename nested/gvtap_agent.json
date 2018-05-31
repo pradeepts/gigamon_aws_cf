@@ -210,7 +210,7 @@
     },
     "Outputs": {
         "PrivateIp": {
-            "Description": "Server's PublicIp Address",
+            "Description": "Server's PrivateIp",
             "Value": {
                 "Fn::GetAtt": [
                     "GvTapAgentInstance",

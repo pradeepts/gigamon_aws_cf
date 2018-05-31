@@ -516,10 +516,10 @@
                             "AvailabilityZone"
                         ]
                     },
-                    "GigaVUEPublicIp": {
+                    "GigaVUEPublicDnsName": {
                         "Fn::GetAtt": [
                             "GigaVUEFM",
-                            "Outputs.PublicIp"
+                            "Outputs.PublicDnsName"
                         ]
                     },
                     "GigaVUEInstanceId": {
@@ -578,7 +578,7 @@
                         {
                             "Fn::GetAtt": [
                                 "GigaVUEFM",
-                                "Outputs.PublicIp"
+                                "Outputs.PublicDnsName"
                             ]
                         }
                     ]
@@ -608,7 +608,7 @@
                         {
                             "Fn::GetAtt": [
                                 "Splunk",
-                                "Outputs.PublicIp"
+                                "Outputs.PublicDnsName"
                             ]
                         },
                         ":8000"
@@ -635,7 +635,7 @@
                         {
                             "Fn::GetAtt": [
                                 "NtopNG",
-                                "Outputs.PublicIp"
+                                "Outputs.PublicDnsName"
                             ]
                         },
                         ":3000"
@@ -661,7 +661,7 @@
                         {
                             "Fn::GetAtt": [
                                 "SecurityOnion",
-                                "Outputs.PublicIp"
+                                "Outputs.PublicDnsName"
                             ]
                         }
                     ]
