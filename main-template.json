@@ -464,10 +464,10 @@
                             "AvailabilityZone"
                         ]
                     },
-                    "GigaVUEPublicIp": {
+                    "GigaVUEPublicDnsName": {
                         "Fn::GetAtt": [
                             "GigaVUEFM",
-                            "Outputs.PublicIp"
+                            "Outputs.PublicDnsName"
                         ]
                     },
                     "GigaVUEInstanceId": {
@@ -526,7 +526,7 @@
                         {
                             "Fn::GetAtt": [
                                 "GigaVUEFM",
-                                "Outputs.PublicIp"
+                                "Outputs.PublicDnsName"
                             ]
                         }
                     ]
@@ -556,7 +556,7 @@
                         {
                             "Fn::GetAtt": [
                                 "NtopNG",
-                                "Outputs.PublicIp"
+                                "Outputs.PublicDnsName"
                             ]
                         },
                         ":3000"
@@ -572,12 +572,12 @@
             "Description": "The NtopNG password",
             "Value": "admin"
         },
-        "WiresharkPublicIp": {
-            "Description": "Wireshark PublicIp",
+        "WiresharkPublicDnsName": {
+            "Description": "Wireshark PublicDnsName",
             "Value": {
                 "Fn::GetAtt": [
                     "Wireshark",
-                    "Outputs.PublicIp"
+                    "Outputs.PublicDnsName"
                 ]
             }
         },

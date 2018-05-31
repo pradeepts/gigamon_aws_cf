@@ -3,12 +3,12 @@
     "Description": "Create an EC2 instance for NtopNG",
     "Parameters": {
         "KeyPair": {
-            "Description": "Name of an existing EC2 Key Pair to enable SSH access to the GigaVUE-FM instances",
+            "Description": "Name of an existing EC2 Key Pair to enable SSH access to the NtopNG instances",
             "Type": "AWS::EC2::KeyPair::KeyName",
             "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
         },
         "InstanceType": {
-            "Description": "GigaVUE-FM EC2 instance type",
+            "Description": "NtopNG EC2 instance type",
             "Type": "String"
         },
         "VPC": {
@@ -176,12 +176,12 @@
         }
     },
     "Outputs": {
-        "PublicIp": {
-            "Description": "Server's PublicIp Address",
+        "PublicDnsName": {
+            "Description": "Server's PublicDnsName",
             "Value": {
                 "Fn::GetAtt": [
                     "NtopNGInstance",
-                    "PublicIp"
+                    "PublicDnsName"
                 ]
             }
         },

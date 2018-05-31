@@ -3,12 +3,12 @@
     "Description": "Create an EC2 instance for Traffic Generator",
     "Parameters": {
         "KeyPair": {
-            "Description": "Name of an existing EC2 Key Pair to enable SSH access to the GigaVUE-FM instances",
+            "Description": "Name of an existing EC2 Key Pair to enable SSH access to the NtopNG instances",
             "Type": "AWS::EC2::KeyPair::KeyName",
             "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
         },
         "InstanceType": {
-            "Description": "GigaVUE-FM EC2 instance type",
+            "Description": "NtopNG EC2 instance type",
             "Type": "String"
         },
         "VPC": {
@@ -31,7 +31,7 @@
             "Description": "Availability Zone Name",
             "Type": "String"
         },
-        "GigaVUEPublicIp": {
+        "GigaVUEPublicDnsName": {
             "Description": "GigaVUE-FM Instance Public IP",
             "Type": "String"
         },
@@ -250,9 +250,9 @@
                                     "Ref":"NtopNGPrivateIp"
                                 },
                                 "\n",
-                                "FM_IP=",
+                                "FM_DNS=",
                                 {
-                                    "Ref": "GigaVUEPublicIp"
+                                    "Ref": "GigaVUEPublicDnsName"
                                 },
                                 "\n",
                                 "GVTAP_AMIID=",
@@ -278,7 +278,7 @@
                                 "cd /home/ubuntu/\n",
                                 "wget https://s3.amazonaws.com/gigamonartifacts/wireshark_ntopng/scripts/cron_job.sh\n",
                                 "chmod 777 /home/ubuntu/cron_job.sh\n",
-                                "sh cron_job.sh $agent1_ip $FM_ID $VPC_ID $KEY_PAIR $MGMT_SUBNET $MIRROR_SUBNET $GIGAMON_SG_ID $REGION $AZZONE $NTOPNG_IP $FM_IP $GVTAP_AMIID $VSCONTLR_AMIID $VSNODE_AMIID $WIRESHARK_IP"
+                                "sh cron_job.sh $agent1_ip $FM_ID $VPC_ID $KEY_PAIR $MGMT_SUBNET $MIRROR_SUBNET $GIGAMON_SG_ID $REGION $AZZONE $NTOPNG_IP $FM_DNS $GVTAP_AMIID $VSCONTLR_AMIID $VSNODE_AMIID $WIRESHARK_IP"
                             ]
                         ]
                     }

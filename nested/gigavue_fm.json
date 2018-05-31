@@ -296,12 +296,12 @@
         }
     },
     "Outputs": {
-        "PublicIp": {
+        "PublicDnsName": {
             "Description": "Server's PublicIp Address",
             "Value": {
                 "Fn::GetAtt": [
                     "GigaVUEFMInstance",
-                    "PublicIp"
+                    "PublicDnsName"
                 ]
             }
         },

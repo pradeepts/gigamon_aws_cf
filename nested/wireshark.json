@@ -171,12 +171,12 @@
         }
     },
     "Outputs": {
-        "PublicIp": {
+        "PublicDnsName": {
             "Description": "Server's PublicIp Address",
             "Value": {
                 "Fn::GetAtt": [
                     "WireSharkInstance",
-                    "PublicIp"
+                    "PublicDnsName"
                 ]
             }
         },
