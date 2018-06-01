@@ -27,9 +27,9 @@ sudo so-elastic-configure
 sudo so-migrate-elsa-data-to-elastic -y
 sudo so-elastic-final-text
 
-# sudo apt-get -y install libpcre3 libpcre3-dbg libpcre3-dev build-essential autoconf automake libtool libpcap-dev libnet1-dev libyaml-0-2 libyaml-dev zlib1g zlib1g-dev libcap-ng-dev libcap-ng0 make libmagic-dev
-# sudo apt-get -y install build-essential bison flex linux-headers-$(uname -r)
-# sleep 3
+sudo apt-get -y install libpcre3 libpcre3-dbg libpcre3-dev build-essential autoconf automake libtool libpcap-dev libnet1-dev libyaml-0-2 libyaml-dev zlib1g zlib1g-dev libcap-ng-dev libcap-ng0 make libmagic-dev
+sudo apt-get -y install build-essential bison flex linux-headers-$(uname -r)
+sleep 3
 sudo ip link del vxlan0
 
 sudo chmod 777 /etc/apt/sources.list

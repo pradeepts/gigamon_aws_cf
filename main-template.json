@@ -197,8 +197,7 @@
         "SecurityOnionPassword": {
             "Description": "SecurityOnion Password",
             "NoEcho": "true",
-            "Type": "String",
-            "Default": "SecOni@1234"
+            "Type": "String"
         },
         "GvTapAgentInstanceType": {
             "Description": "GvTapAgent EC2 Instance Type",
