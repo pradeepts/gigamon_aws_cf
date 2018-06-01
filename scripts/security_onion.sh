@@ -41,5 +41,3 @@ sudo ip link add vxlan0 type vxlan id 0 group 239.1.1.1 dev eth0 dstport 4789
 sudo ip link set vxlan0 up
 sudo service nsm restart
 sudo ufw disable
-
-
